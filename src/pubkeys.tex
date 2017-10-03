@@ -1,0 +1,88 @@
+% Copyright 2017 Justin Gombos
+% 
+% Licensed under the Apache License, Version 2.0 (the "License");
+% you may not use this file except in compliance with the License.
+% You may obtain a copy of the License at
+% 
+%     http://www.apache.org/licenses/LICENSE-2.0
+% 
+% Unless required by applicable law or agreed to in writing, software
+% distributed under the License is distributed on an "AS IS" BASIS,
+% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+% See the License for the specific language governing permissions and
+% limitations under the License.
+
+%\documentclass[12pt]{minimal}
+\documentclass[12pt]{scrartcl}
+\usepackage[margin=30mm,nofoot,pdftex,a4paper,landscape]{geometry}
+\usepackage[pdftex,inactive,tightpage]{preview}
+\usepackage[table,dvipsnames,svgnames]{xcolor} % loads also »colortbl«
+\usepackage[T1]{fontenc} % needed for fonts
+\usepackage{attachfile}
+\usepackage{array}
+\usepackage{multicol}
+
+% The PEM files attached herein can be created by simply copying the
+% smime_keys-produced certificate and renaming, or exporting a pkcs12
+% (.p12) file from the browser and extracting the certificate:
+% 
+%   $ openssl pkcs12 -in key_pair.p12 -clcerts -nokeys -out pubkey.pem
+
+\newcommand{\dn}{@gombos.info}
+\newcommand{\pdn}{@protonmail.ch}
+
+\input{../work/pubkeys_files.tex} % <= read auto-generated file to define commands for \pgplegal, \pgpwork, etc.
+
+\newcommand{\pgpkey}{spare}
+
+\newcommand{\protonfootnote}{%
+  Importing the protonmail key makes it possible to direct mail to
+  Justin's protonmail address from outside protonmail.  This is rarely
+  sensible though because the \dn\ addresses have a faster response
+  time and better filtering.}
+
+\begin{document}
+\begin{preview}
+  \section{Justin's public keys}
+  \begin{multicols}{2}
+    The right two columns of the following table have attachments to
+    Justin's public keys.  You need to know whether your mail client
+    uses S/MIME or PGP.  If you forgot, look back at the
+    \href{https://www.github.com/alchemistanaut/contact/blob/master/build/email.svg}{diagram}.
+    Clicking on an attachment may automatically import it, depending
+    on your the MIME application associations in your environment.  If
+    not, you can right-click, save to a file, then import the key
+    manually.
+  \end{multicols}
+
+  \rowcolors{2}{Khaki}{LightGoldenrodYellow}
+  \begin{minipage}{6cm}
+  \setlength{\tabcolsep}{6pt}%this should be the default - not sure why it must be explicit
+%  \begin{tabular}{l>{\ttfamily}r>{\fontsize{1mm}{2mm}\selectfont}rr}
+  \begin{tabular}{>{\raggedright}p{7cm}>{\ttfamily}r>{\tiny}rc}
+    \textsl{\textbf{if e-mailing as a(n)..}}%
+    & \multicolumn{1}{r}{\textsl{\textbf{then address to}}}%
+    & \multicolumn{1}{r}{\textsl{\textbf{using \underline{S/MIME certificate}}}}%
+    & \textsl{\textbf{or \underline{PGP key} (binary)}}\\
+    accountant/lawyer                           & \href{mailto:legal\dn}{legal\dn}   & e-mail support\dn\ for a key & \pgplegal\\
+    client/professor/recruiter                  & \href{mailto:work\dn}{work\dn}     & e-mail support\dn\ for a key & \pgpwork\\
+    friend\textsuperscript{(or f.o.f)}/ comrade/ colleague/ classmate/ VIP/ other    & \href{mailto:crypto\dn}{crypto\dn}         & \certcrypto                  & \pgpcrypto\\
+    protonmail sender\footnote{\protonfootnote} & \href{mailto:bletchleylabs\pdn}{bletchleylabs\pdn} & n/a                          & \pgpproton\\
+    stranger                                    & \href{mailto:public\dn}{public\dn} & e-mail support\dn\ for a key & \pgppublic\\
+  \end{tabular}
+\end{minipage}
+
+\section{Trivia: public PDF password rationale}
+\begin{multicols}{2}
+  Some will wonder why this PDF is encrypted while the password is
+  publicly shared right next to the file.  The public keys contained
+  in this PDF file all have metadata that contains e-mail addresses
+  which could be easily bot-harvested if exposed, and consequently
+  spammed.  So the idea is that it would be unlikely for a bot to be
+  clever enough to capture passwords and then associate them to PDF
+  documents.  Notice also that the e-mail addresses in the table are
+  active links written in a proper font.
+\end{multicols}
+
+\end{preview}
+\end{document}

@@ -1,0 +1,269 @@
+/* -*- mode: graphviz-dot; -*-
+
+Copyright 2017 Justin Gombos
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+digraph <How to E-mail Justin> {
+        //label="How to e-mail Justin";
+        //labelloc=t;
+        bgcolor=lemonchiffon1;
+
+        node [shape=point, width=.01, height=.01, label="", invisible=true];
+
+        green_anchor;
+
+        node [shape=box, width=.75, height=.5, fixedsize=false, style="", invisible=false];
+
+        crypto_ea;
+        web_ea;
+
+        node [shape=note, style="filled", fillcolor=yellow2];
+
+        greennote;
+        webnote;
+        muanote;
+        //eakeyreqnote;
+        pgpnote;
+        smimenote;
+        //confignote;
+
+        node [shape=diamond, style="rounded,filled", fillcolor=wheat];
+
+        directsend_br;
+        crypto_mua_br;
+        //ea_forced_br;
+        attachment_br;
+        problem_br;
+        firsttime_br;
+        webmail_br;
+        reply_br;
+        keyimportchoice_br;
+        
+        node [shape=box, fillcolor="lavenderblush"];
+
+        start [shape=Mdiamond,
+               label=<Do you need to e-mail Justin?<br/>(However unfortunate,<br/>you're in the right place)>,
+               tooltip="Keep calm, carry on.."];
+
+        start -> directsend_br [label="Yes"];
+
+        directsend_br [label=<Are you writing a typical<br/>
+human-generated e-mail,<br/>
+sent from a mail client or web-based<br/>
+dedicated e-mail service?>,
+                       tooltip="hopefully yes"];
+
+        directsend_br -> sharing      [label="No"];
+        directsend_br -> green_anchor [label="Yes", color=green, fontcolor=green, arrowhead=none];
+
+        sharing [shape=egg,
+                 nojustify=false, labeljust=l, label="You are probably:\l*sending a social networking invitation\l*sending an event scheduler poll\l*sending a greeting card\l*or feeding his address to an information\l harvesting system of some kind\r",
+                 tooltip="Sharing?  yikes!"];
+
+        sharing -> sharing_act;
+
+        green_anchor [shape=point, width=.01, height=.01, label="", invisible=true];//[style=invis]?
+
+        green_anchor -> crypto_mua_br [color=green, fontcolor=green];
+
+        greennote [label="Note: the green path through this diagram\lindicates the most convenient for regular\llong-term sustained correspondence,\lat the cost of higher initial setup effort.\l",
+                   tooltip="The quickest one-off msg approach is to use keybase, but you won't have a readable saved copy of what you sent."];
+
+        greennote -> green_anchor [arrowhead=none, style=dotted];
+
+        sharing_act [labeljust=l, label="Justin has unique special-purpose\laddresses for these types of use cases.\lSend him a normal e-mail first\lto request a suitable (abusable) address.\l(if you are sharing his address with\la human, share this diagram instead)\r",
+                     tooltip="Exceptionally, if it's a key-signing party then simply follow the path of a normal e-mail."];
+
+        sharing_act -> directsend_br;
+
+        crypto_mua_br [label=<Are you using a proper PGP<br/>or S&#47;MIME capable mail client?>,
+                       tooltip="Ideally yes; mail clients are more secure than webmail and more convenient for both parties."];
+        crypto_mua_br -> reply_br   [label="Yes", color=green, fontcolor=green];
+        crypto_mua_br -> webmail_br [label="No"];
+        crypto_mua_br -> muanote    [arrowhead=none, style=dotted];
+
+        reply_br [label="Will you need a reply?", tooltip="If you'll need a reply, then I'll need your key so I can reply securely."];
+        reply_br -> firsttime_br [label="No"];
+        reply_br -> gen_key [label="Yes", color=green, fontcolor=green];
+
+        webmail_br [label=<Are you sending from<br/>a hushmail, protonmail, or tutanota account?>,
+                    tooltip="These webmail services are relatively safe compared to other webmail services, but still 2nd to using a proper mail client"];
+        webmail_br -> web_ea        [label="Yes"];
+        webmail_br -> attachment_br [label="No"];
+
+        /*
+        muanote [label=<<u>answer hints</u><br/>
+                 Claws Mail =&gt; yes (both)<br align="left"/>
+                 Evolution =&gt; yes (both)<br align="left"/>
+                 GNUS =&gt; yes (both) https://www.emacswiki.org/emacs/GnusSMIME<br align="left"/>
+                 iOS mail.app =&gt; yes (S&#x2F;MIME)<br align="left"/>
+                 K-9 Mail =&gt; yes (PGP)<br align="left"/>
+                 mutt =&gt; yes (both)<br align="left"/>
+                 MS Outlook =&gt; yes (S&#x2F;MIME, but MUA is far from "proper")<br align="left"/>
+                 SMile =&gt; yes (both)<br align="left"/>
+                 Thunderbird =&gt; yes (S&#x2F;MIME) http://kb.mozillazine.org/Installing_an_SMIME_certificate<br align="left"/>
+                 TB+Enigmail =&gt; yes (both)<br align="left"/>
+                 webmail =&gt; no<br align="left"/>
+                 others=&gt; see https://en.wikipedia.org/wiki/Comparison_of_e-mail_clients#General_features<br align="left"/>>];
+        */
+        /*
+        muanote [label=<<u>answer hints</u><br/>
+                 <table>
+                 <tr><td>Claws Mail</td><td>yes (both)</td></tr>
+                 <tr><td>Evolution</td><td>yes (both)</td></tr>
+                 <tr><td>GNUS</td><td>yes (both) https://www.emacswiki.org/emacs/GnusSMIME</td></tr>
+                 <tr><td>iOS mail.app</td><td>yes (S&#x2F;MIME)</td></tr>
+                 <tr><td>K-9 Mail</td><td>yes (PGP)</td></tr>
+                 <tr><td>mutt</td><td>yes (both)</td></tr>
+                 <tr><td>MS Outlook</td><td>yes (S&#x2F;MIME, but MUA is far from "proper")</td></tr>
+                 <tr><td>SMile</td><td>yes (both)</td></tr>
+                 <tr><td>Thunderbird</td><td>yes (S&#x2F;MIME) http://kb.mozillazine.org/Installing_an_SMIME_certificate</td></tr>
+                 <tr><td>TB+Enigmail</td><td>yes (both)</td></tr>
+                 <tr><td>webmail</td><td>no</td></tr>
+                 <tr><td>other</td><td>see https://en.wikipedia.org/wiki/Comparison_of_e-mail_clients#General_features</td></tr>
+                 </table>>];
+        */
+
+        //muanote [shape=Mrecord, fillcolor=yellow2, rankdir="TB", label="{{Claws Mail\l | = | yes both\l} | {Evolution\l | = | yes both\l}}"];
+
+        muanote [URL=<https://en.wikipedia.org/wiki/Comparison_of_e-mail_clients#General_features>,
+                 tooltip="Clicking this node goes to a wiki showing a table of MUAs with columns indicating S/MIME and PGP support",
+                 label="", image="muas.png"];
+
+        firsttime_br [label=<Are you e-mailing Justin securely<br/>for the first time, or has his key expired?>, tooltip="You'll need to have Justin's key before sending him a message.  Once you have it, it's good until it expires (few years generally)."];
+        //firsttime_br -> ea_forced_br [label="Yes (using PGP)"];
+        //firsttime_br -> acquire_smimekey [label="Yes (using S/MIME)"];
+        firsttime_br -> keyimportchoice_br [label="Yes", tooltip="(using S/MIME or PGP)"];
+        //firsttime_br -> pdf_acquire_key    [label="Yes", tooltip="(using S/MIME or PGP)"];
+        firsttime_br -> crypto_ea          [label="No (using PGP)"];
+        firsttime_br -> ea_forced_ea_short [label="No (using S/MIME)"];
+
+        keyimportchoice_br [label="choose"];
+        keyimportchoice_br -> pdf_acquire_key;
+        keyimportchoice_br -> acquire_by_email;
+        
+        gen_key [labeljust=l, label="(one time only)\nGenerate a key pair for yourself if you\lhave not already done so and ensure\lthe public key is accessible to Justin.\l",
+                 tooltip="You may have done this when first configuring your mail client, although it's not often part of the installation wizards (you most likely would have had to initiate the process)."];
+        gen_key -> firsttime_br [color=green, fontcolor=green];
+        gen_key -> smimenote [arrowhead=none, style=dotted];
+        gen_key -> pgpnote [arrowhead=none, style=dotted];
+
+        smimenote [label="S/MIME users: once you have\la key pair, simply signing your\lfirst msg will automatically\lsupply your public key to Justin.\l"
+                   tooltip="S/MIME key generation is a little more tedious, although it's easy to send your public key."];
+
+        pgpnote [label="PGP users: once you\lhave a key pair, you\lcan send your public\lkey as an attachment\lor publish it on a\lkeyserver.\l"
+                 tooltip="PGP key generation is a simple process."];
+
+        web_ea [label="", image="node_webmail_addresses.png", tooltip="The script font is to mitigate OCR-capable bot-executed address harvesting (to some extent)."];
+        web_ea -> webnote [arrowhead=none, style=dotted];
+        /*web_ea:other -> crypto_mua_br;
+        web_ea:hm -> celebrate;
+        web_ea:pm -> celebrate;*/
+        web_ea -> celebrate;
+
+        attachment_br [label=<Do you need to<br/>attach a file?>, tooltip="If yes, you won't like the next node."];
+        attachment_br -> keybase [label="No"];
+        attachment_br -> screwed [label="Yes", tooltip="find a different path"];
+
+        webnote [label="Note: expect a slow response time\lfor protonmail or tutanota.\l",
+                 tooltip="All gombos.info accounts are checked daily.  The other two require Justin to do a manual web login.  Protonmail have daily notifications, so Justin's response time is ~2 days.  Tutanota does not, it could take ~2-3 weeks before a msg is spotted."];
+
+        celebrate [style="diagonals,filled", fillcolor="powderblue", label="\N", tooltip="yay!"];
+
+        keybase [URL="https://keybase.io/encrypt#alchemistanaut",
+                 label="Click here, or go to keybase.io/encrypt#alchemistanaut,\lwrite your message, click 'encrypt', copy-paste the resulting\ltext into a normal msg. (if you need a reply, include a\lpassphrase of your choosing in the msg and remember it)\r",
+                 tooltip="This is quite simple, and you can use your usual mail client or webmail service without any changes.  If you want a reply, Justin will likely respond with a PDF that can be opened using whatever password you supply.  Limitation: there is no way to send Justin a file attachment using this keybase mechanism."];
+        keybase -> crypto_ea;
+
+        screwed [style="diagonals,filled", fillcolor="darksalmon", label=<you're screwed>,
+                 tooltip="You might want to find a different path through the graph."];
+
+        /* needless complexity
+        ea_forced_br [label=<Does your mail client<br/>force the recipient to match<br/>the address on the key?>];
+        //ea_forced_br -> acquire_by_email [label="Yes"];
+        ea_forced_br -> pdf_acquire_key [label="Yes"];
+        ea_forced_br -> acquire_pgpkey   [label="No"];
+        ea_forced_br -> eakeyreqnote     [arrowhead=none, style=dotted];
+        */
+        
+        /* kuix.de has issues
+        acquire_smimekey [URL="https://kuix.de/smime-keyserver",
+                          label="import his latest public key\lfrom kuix.de/smime-keyserver\l(the e-mail address\lfor query is below)\r"];
+        acquire_smimekey -> ea_forced_ea_short;
+        acquire_smimekey -> crypto_ea [arrowhead=halfopen, style=dashed, color=magenta, fontcolor=magenta, label="lookup query string"];
+        acquire_smimekey -> acquire_by_email [style=dotted, color=brown, fontcolor=brown, labelfloat=false, label="or alternatively"];
+        */
+        pdf_acquire_key [URL="file://./pubkeys.pdf",
+                         tooltip="Clicking this will open a PDF container holding keys to choose from",
+                         label="Import Justin's key.\lClick on this node\land use password\l\"wildthing\" to open\lthe PDF.\l"];
+        pdf_acquire_key -> ea_forced_ea_short;
+        //pdf_acquire_key -> acquire_by_email [style=dotted, color=brown, fontcolor=brown, labelfloat=false, label="or alternatively"];
+        
+        ea_forced_ea_short [label="Use the address associated\lwith the key", tooltip="If you don't know the address associated to the key, it will generally be the address from which I sent you the key.  If you took the key from the PDF file, then it's evident from that file.  PGP users: if you imported Justin's key from a PGP key server, then you should look at the table of addresses and select the best one.  But note that you may have to configure your mail client to map key to address because Justin's published PGP keys have a deliberately unusable address."];
+        ea_forced_ea_short -> celebrate;
+
+        crypto_ea [label="", image="node_email_addresses.png",
+                   tooltip="The different addresses help Justin filter and reduce impact on others if one address is attacked, but there is no difference as far as spam scoring.  The rasterized script font is to mitigate OCR-capable bot-executed address harvesting (to some extent)."];
+        crypto_ea -> celebrate [color=green, fontcolor=green];
+
+        acquire_by_email [fixedsize=true, width=2, height=0.6,
+                          labelloc=t, labeljust=l, label="Ask Justin for a key at:",
+                          imagescale=width, imagepos="bc", image="suprt_ea.png",
+                          tooltip="This is probably easier than the self-service PDF option, but obviously it's not instant."];
+        acquire_by_email -> ea_forced_ea_short;
+
+                          //acquire_by_email -> ea_forced_ea;
+                          //ea_forced_ea [shape=box,
+                                          // label="Use the address associated\lwith the key if it is not a dodgy\lspamgourmet.com ('SG') address.\lPublic keyring publications of\lJustin's PGP key have a blackhole'd\lSG address to mitigate bot-harvesting.\lKeys distributed via e-mail have the\lcorrect address.\l"];
+
+                                          //ea_forced_ea -> acquire_by_email [label = "If the PGP key has an SG address"];
+
+                                          /*
+        acquire_pgpkey [shape=box,
+                        URL=<https://pgp.mit.edu/pks/lookup?op=get&amp;search=0x344324D52DA717EC>,
+                        label="import his latest public\lkey from pgp.mit.edu\l"];
+        acquire_pgpkey -> config_map;
+        //acquire_pgpkey -> acquire_by_email [arrowhead=none, style=dotted, label="or alternatively"];
+
+        config_map [label="Configure your MUA to map\lJustin's key to address.\l"];
+        config_map -> crypto_ea;
+        config_map -> confignote [arrowhead=none, style=dotted];
+
+        confignote [label=<<u>tips</u><br/>
+Gnus =&gt; <font face="Courier">(setq epa-mail-aliases '(("</font><i>&lt;Justin's address&gt;</i><font face="Courier">" . "0x2DA717EC")))</font><br align="left"/>
+mutt =&gt; <font face="Courier">crypt-hook  </font><i>&lt;Justin's address&gt;</i><font face="Courier">  0x2DA717EC</font><br align="left"/>
+others (<font face="Courier">gpg.conf</font> edit) =&gt; <font face="Courier">group </font><i>&lt;Justin's address&gt;</i><font face="Courier">=0x2DA717EC</font><br align="left"/>>];
+        */
+        
+        /*
+        eakeyreqnote [label=<<u>answer hints</u><br/>
+For PGP the general<br align="left"/>
+answer is <b>no </b> (certainly<br align="left"/>
+the case for Gnus and mutt).<br align="left"/>
+S&#47;MIME MUAs: yes<br align="left"/>>];
+        */
+        
+problem_br [label="Questions? Problems?", tooltip="Secure e-mail can be complicated, but Justin will support you."];
+problem_br -> get_support;
+
+get_support [URL=<https://github.com/alchemistanaut>,
+             fixedsize=true, width=2, height=1.4,
+             labelloc=t, labeljust=l, label="File a github issue by\lclicking this node, or\lE-mail Justin at:\l",
+             tooltip="Clicking will bring you to the github issues page, where you can describe your issue.  Note that you'll need a github account to create an issue, and your entry will be publicly viewable.  Alternatively, you can e-mail support questions to the address herein, in the clear if needed.",
+             imagescale=width, imagepos="bc", image="suprt_ea.png"];
+
+{ rank=same; celebrate; problem_br; screwed; }
+{ rank=same; web_ea; crypto_ea; }
+}

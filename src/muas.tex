@@ -1,0 +1,40 @@
+%\documentclass[12pt]{minimal}
+\documentclass[12pt]{scrartcl}
+\usepackage[margin=0mm,nofoot,nohead,a5paper,landscape]{geometry}
+\usepackage[active,tightpage,xetex]{preview} % xetex w/tightpage fixes the northward drift, apparently, even though xetex is not used
+\usepackage[table,dvipsnames,svgnames]{xcolor} % loads also »colortbl«
+\usepackage[hypertex]{hyperref} % the hypertex option is critical to making dvisvgm work
+
+\makeatletter
+\def\@xfootnote[#1]{%
+  \protected@xdef\@thefnmark{#1}%
+  \@footnotemark\@footnotetext}
+\makeatother
+
+\begin{document}
+\begin{preview}
+  \fontsize{4mm}{4mm}\selectfont 
+  %\centerline{\underline{answer hints}}
+  \rowcolors{2}{Khaki}{LightGoldenrodYellow} %this breaks old versions of dvisvgm!
+  \begin{minipage}{6cm} %needed to append a footnote
+    \begin{tabular}{lp{26mm}}
+      \multicolumn{2}{|c|}{\underline{answer hints}}\\
+      \textsl{\textbf{MUA}} & \textsl{\textbf{answer}}\\
+      Claws Mail            & yes (both)\\
+      Evolution             & yes (both)\\
+      Gnus                  & yes (\href{https://www.emacswiki.org/emacs/GnusSMIME}{both})\\
+      iOS mail.app          & yes (S/MIME)\\
+      K-9 Mail              & yes (PGP)\\
+      mutt                  & yes (both)\\
+      MS Outlook            & yes\footnote[$\star$]{hardly "proper", but anyway} (S/MIME)\\
+      SMile                 & yes (both)\\
+      Thunderbird           & yes (\href{http://kb.mozillazine.org/Installing_an_SMIME_certificate}{S/MIME})\\
+      TB+Enigmail           & yes (both)\\
+      webmail               & no \tiny(except \href{eludemaillhqfkh5.onion}{elude.in})\\
+      % others                & see \href{https://en.wikipedia.org/wiki/Comparison_of_e-mail_clients#General_features}{the wiki}\\
+      % others                & see \verb|https://en.wikipedia.org/wiki/Comparison_of_e-mail_clients#General_features|\\
+      others                & click this node\\
+    \end{tabular}
+  \end{minipage}
+\end{preview}
+\end{document}
