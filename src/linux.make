@@ -13,7 +13,7 @@
 # limitations under the License.
 
 #release_url=https://github.com/alchemistanaut/contact/releases/download/v2017.0.0
-release_url=$(shell sed -ne '/http.*how_to_e-mail_justin.svg/s! *\(http.*\)/how_to_e-mail_justin.svg!\1!p' README.md)
+release_url=$(shell sed -ne '/http.*how_to_e-mail_justin.svg/s!.*\(http.*\)/how_to_e-mail_justin.svg.*!\1!p' README.md)
 
 uid = support
 dn  = gombos.info
