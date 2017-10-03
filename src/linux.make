@@ -12,12 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#release_url=https://github.com/alchemistanaut/contact/releases/download/v2017.0.0
+# Parse the release URL from the readme file.
 release_url=$(shell sed -ne '/http.*how_to_e-mail_justin.svg/s!.*\(http.*\)/how_to_e-mail_justin.svg.*!\1!p' README.md)
 
+# support address components
 uid = support
 dn  = gombos.info
-password = wildthing
+
+# password for the PDF file containing public keys (which have metadata bots shouldn't see)
+pdfpassword = "wildthing"
 
 output_dir = build
 src_dir    = src
@@ -30,6 +33,7 @@ products = $(output_dir)/$(basename).svg\
 	   $(output_dir)/node_webmail_addresses.png\
            $(output_dir)/pubkeys_aes.pdf\
 	   $(output_dir)/suprt_ea.png\
+	   $(work_dir)/$(basename)_ugly.svg\
 	   $(work_dir)/node_email_addresses.aux\
 	   $(work_dir)/node_email_addresses.log\
 	   $(work_dir)/node_email_addresses.pdf\
@@ -60,7 +64,7 @@ $(work_dir)/pubkeys_files.tex:
 
 $(output_dir)/%_aes.pdf: $(work_dir)/%.pdf
 #	cd $(work_dir)/; pdflatex -output-directory ../$(output_dir)/ ../"$<"
-	qpdf --encrypt "$(password)" "$(password)" 128 --use-aes=y -- $(work_dir)/"$(notdir $(basename $<))".pdf "$@"
+	qpdf --encrypt "$(pdfpassword)" "$(pdfpassword)" 128 --use-aes=y -- $(work_dir)/"$(notdir $(basename $<))".pdf "$@"
 
 $(work_dir)/%.pdf: $(src_dir)/%.tex
 	pdflatex -output-directory $(work_dir)/ "$<"
@@ -77,17 +81,32 @@ $(output_dir)/%.png: $(work_dir)/%.pdf
 $(output_dir)/%.svg: $(work_dir)/%.dvi
 	tools/dvisvgm --color --output=$(output_dir)/%f.svg "$<"
 
-$(output_dir)/%.svg: $(src_dir)/%.gv
+# Renders ugly machine-generated SVG code from a graphviz file.
+# Some string replacements are done with sed:
+#
+# @releaseurl@  <= replaced by $(release_url)
+# @pdfpassword@ <= replaced by $(pdfpassword)
+#
+# URLs are also inserted into the SVG file by sed, because graphviz
+# has blocked URL-referenced images ("for security reasons").
+$(work_dir)/%_ugly.svg: $(src_dir)/%.gv
 	cd $(output_dir)/; dot -Tsvg:svg:core ../"$<" > ../"$@"; # better font and working URLs, but nodes are not embedded
 	#cd $(work_dir); dot -Tsvg:svg:core ../"$<" > ../"$@"; # better font and working URLs, but nodes are not embedded
 	#cd $(output_dir)/; dot -Tsvg:cairo:cairo -Nfontname=Arial ../"$<" > ../"$@"; # nodes are embeeded but URLs broken
-	sed -i -e "/[.]png/s![^\"]*.png!$(release_url)/&!gi;/@releaseurl@/s!@releaseurl@!$(release_url)!gi" "$@"; # hack to remedy dot's broken by design approach (image references cannot be URLs "for security reasons")
+	sed -i -e "/[.]png/s![^\"]*.png!$(release_url)/&!gi;/@releaseurl@/s!@releaseurl@!$(release_url)!gi;/@pdfpassword@/s!@pdfpassword@!$(pdfpassword)!gi" "$@"
+
+# Make the SVG file pretty.  Note that svgpp introduces artifacts
+# (extra whitespace on the rendered diagram), so it's disabled until
+# that's worked out.
+$(output_dir)/%.svg: $(work_dir)/%_ugly.svg
+	#svgpp "$<" "$@"
+	mv "$<" "$@"
 
 ####### Build rules
 
 $(work_dir)/pubkeys.pdf: $(work_dir)/pubkeys_files.tex
 
-# it's a shame we depend on muas.png instead of muas.svg, but svg images render blank
+# it's a shame we depend on node_muas.png instead of node_muas.svg, but svg images render blank
 $(output_dir)/$(basename).svg: $(output_dir)/suprt_ea.png $(output_dir)/node_webmail_addresses.png $(output_dir)/node_email_addresses.png $(output_dir)/node_muas.png $(output_dir)/pubkeys_aes.pdf
 
 $(output_dir)/suprt_ea.png:
