@@ -19,6 +19,7 @@ digraph <How to E-mail Justin> {
         //label="How to e-mail Justin";
         //labelloc=t;
         bgcolor=lemonchiffon1;
+        imagepath=".:./work/:../work/"; //this is broken in graphviz version 2.38.0
 
         node [shape=point, width=.01, height=.01, label="", invisible=true];
 
@@ -50,7 +51,7 @@ digraph <How to E-mail Justin> {
         webmail_br;
         reply_br;
         keyimportchoice_br;
-        
+
         node [shape=box, fillcolor="lavenderblush"];
 
         start [shape=Mdiamond,
@@ -153,7 +154,7 @@ dedicated e-mail service?>,
         keyimportchoice_br [label="choose"];
         keyimportchoice_br -> pdf_acquire_key;
         keyimportchoice_br -> acquire_by_email;
-        
+
         gen_key [labeljust=l, label="(one time only)\nGenerate a key pair for yourself if you\lhave not already done so and ensure\lthe public key is accessible to Justin.\l",
                  tooltip="You may have done this when first configuring your mail client, although it's not often part of the installation wizards (you most likely would have had to initiate the process)."];
         gen_key -> firsttime_br [color=green, fontcolor=green];
@@ -197,20 +198,22 @@ dedicated e-mail service?>,
         ea_forced_br -> acquire_pgpkey   [label="No"];
         ea_forced_br -> eakeyreqnote     [arrowhead=none, style=dotted];
         */
-        
-        /* kuix.de has issues
+
+        /* kuix.de has CA issues and e-mail issues
         acquire_smimekey [URL="https://kuix.de/smime-keyserver",
                           label="import his latest public key\lfrom kuix.de/smime-keyserver\l(the e-mail address\lfor query is below)\r"];
         acquire_smimekey -> ea_forced_ea_short;
         acquire_smimekey -> crypto_ea [arrowhead=halfopen, style=dashed, color=magenta, fontcolor=magenta, label="lookup query string"];
         acquire_smimekey -> acquire_by_email [style=dotted, color=brown, fontcolor=brown, labelfloat=false, label="or alternatively"];
         */
-        pdf_acquire_key [URL="file://./pubkeys.pdf",
+        
+        // make will replace @releaseurl@ with the proper one
+        pdf_acquire_key [URL="@releaseurl@/pubkeys_aes.pdf",
                          tooltip="Clicking this will open a PDF container holding keys to choose from",
                          label="Import Justin's key.\lClick on this node\land use password\l\"wildthing\" to open\lthe PDF.\l"];
         pdf_acquire_key -> ea_forced_ea_short;
         //pdf_acquire_key -> acquire_by_email [style=dotted, color=brown, fontcolor=brown, labelfloat=false, label="or alternatively"];
-        
+
         ea_forced_ea_short [label="Use the address associated\lwith the key", tooltip="If you don't know the address associated to the key, it will generally be the address from which I sent you the key.  If you took the key from the PDF file, then it's evident from that file.  PGP users: if you imported Justin's key from a PGP key server, then you should look at the table of addresses and select the best one.  But note that you may have to configure your mail client to map key to address because Justin's published PGP keys have a deliberately unusable address."];
         ea_forced_ea_short -> celebrate;
 
@@ -246,7 +249,7 @@ Gnus =&gt; <font face="Courier">(setq epa-mail-aliases '(("</font><i>&lt;Justin'
 mutt =&gt; <font face="Courier">crypt-hook  </font><i>&lt;Justin's address&gt;</i><font face="Courier">  0x2DA717EC</font><br align="left"/>
 others (<font face="Courier">gpg.conf</font> edit) =&gt; <font face="Courier">group </font><i>&lt;Justin's address&gt;</i><font face="Courier">=0x2DA717EC</font><br align="left"/>>];
         */
-        
+
         /*
         eakeyreqnote [label=<<u>answer hints</u><br/>
 For PGP the general<br align="left"/>
@@ -254,11 +257,11 @@ answer is <b>no </b> (certainly<br align="left"/>
 the case for Gnus and mutt).<br align="left"/>
 S&#47;MIME MUAs: yes<br align="left"/>>];
         */
-        
+
 problem_br [label="Questions? Problems?", tooltip="Secure e-mail can be complicated, but Justin will support you."];
 problem_br -> get_support;
 
-get_support [URL=<https://github.com/alchemistanaut>,
+get_support [URL=<https://github.com/alchemistanaut/contact/issues>,
              fixedsize=true, width=2, height=1.4,
              labelloc=t, labeljust=l, label="File a github issue by\lclicking this node, or\lE-mail Justin at:\l",
              tooltip="Clicking will bring you to the github issues page, where you can describe your issue.  Note that you'll need a github account to create an issue, and your entry will be publicly viewable.  Alternatively, you can e-mail support questions to the address herein, in the clear if needed.",

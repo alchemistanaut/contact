@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+release_url=https://github.com/alchemistanaut/contact/releases/download/v2017.0.0
+
 uid = support
 dn  = gombos.info
 password = wildthing
@@ -22,26 +24,24 @@ work_dir   = work
 #SUBDIRS = $(output_dir)
 basename = email
 products = $(output_dir)/$(basename).svg\
-	   $(output_dir)/muas.png\
-	   $(output_dir)/node_email_addresses.png\
-	   $(output_dir)/node_webmail_addresses.png\
-	   $(output_dir)/suprt_ea.png\
-           $(output_dir)/pubkeys_aes.pdf\
-	   $(work_dir)/$(basename).aux\
-	   $(work_dir)/$(basename).log\
-	   $(work_dir)/muas.aux\
-	   $(work_dir)/muas.dvi\
-	   $(work_dir)/muas.log\
+	   $(work_dir)/node_muas.aux\
+	   $(work_dir)/node_muas.dvi\
+	   $(work_dir)/node_muas.log\
+	   $(work_dir)/node_muas.png\
 	   $(work_dir)/node_email_addresses.aux\
 	   $(work_dir)/node_email_addresses.log\
 	   $(work_dir)/node_email_addresses.pdf\
+	   $(work_dir)/node_email_addresses.png\
 	   $(work_dir)/node_webmail_addresses.aux\
 	   $(work_dir)/node_webmail_addresses.log\
 	   $(work_dir)/node_webmail_addresses.pdf\
+	   $(work_dir)/node_webmail_addresses.png\
 	   $(work_dir)/pubkeys.aux\
 	   $(work_dir)/pubkeys.log\
 	   $(work_dir)/pubkeys.out\
 	   $(work_dir)/pubkeys.pdf\
+	   $(work_dir)/suprt_ea.png\
+           $(work_dir)/pubkeys_aes.pdf\
 	   $(work_dir)/pubkeys_files.tex
 
 .PHONY: all clean
@@ -63,31 +63,34 @@ $(work_dir)/%.pdf: $(src_dir)/%.tex
 $(work_dir)/%.dvi: $(src_dir)/%.tex
 	latex -output-directory $(work_dir)/ "$<"
 
-$(output_dir)/%_aes.pdf: $(src_dir)/%.tex
+$(work_dir)/%_aes.pdf: $(src_dir)/%.tex
 #	cd $(work_dir)/; pdflatex -output-directory ../$(output_dir)/ ../"$<"
 	cd $(work_dir)/; pdflatex ../"$<"
 	qpdf --encrypt "$(password)" "$(password)" 128 --use-aes=y -- $(work_dir)/"$(notdir $(basename $<))".pdf "$@"
 
-$(output_dir)/%.png: $(work_dir)/%.dvi
+$(work_dir)/%.png: $(work_dir)/%.dvi
 	dvipng -o "$@" "$<"
 
-$(output_dir)/%.png: $(work_dir)/%.pdf
+$(work_dir)/%.png: $(work_dir)/%.pdf
 	convert "$<" "$@"
 
 $(output_dir)/%.svg: $(work_dir)/%.dvi
 	tools/dvisvgm --color --output=$(output_dir)/%f.svg "$<"
 
 $(output_dir)/%.svg: $(src_dir)/%.gv
-	cd $(output_dir)/; dot -Tsvg ../"$<" > ../"$@"
+	#cd $(output_dir)/; dot -Tsvg:svg:core ../"$<" > ../"$@"; # better font and working URLs, but nodes are not embedded
+	cd $(work_dir); dot -Tsvg:svg:core ../"$<" > ../"$@"; # better font and working URLs, but nodes are not embedded
+	#cd $(output_dir)/; dot -Tsvg:cairo:cairo -Nfontname=Arial ../"$<" > ../"$@"; # nodes are embeeded but URLs broken
+	sed -i -e "/[.]png/s![^\"]*.png!$(release_url)/&!gi;/@releaseurl@/s!@releaseurl@!$(release_url)!gi" "$@"; # hack to remedy dot's broken by design approach (image references cannot be URLs "for security reasons")
 
 ####### Build rules
 
-$(output_dir)/pubkeys_aes.pdf: $(work_dir)/pubkeys_files.tex
+$(work_dir)/pubkeys_aes.pdf: $(work_dir)/pubkeys_files.tex
 
 # it's a shame we depend on muas.png instead of muas.svg, but svg images render blank
-$(output_dir)/$(basename).svg: $(output_dir)/suprt_ea.png $(output_dir)/node_webmail_addresses.png $(output_dir)/node_email_addresses.png $(output_dir)/muas.png $(output_dir)/pubkeys_aes.pdf
+$(output_dir)/$(basename).svg: $(work_dir)/suprt_ea.png $(work_dir)/node_webmail_addresses.png $(work_dir)/node_email_addresses.png $(work_dir)/node_muas.png $(work_dir)/pubkeys_aes.pdf
 
-$(output_dir)/suprt_ea.png:
+$(work_dir)/suprt_ea.png:
 #	convert -channel RGBA -background none -fill black -pointsize 16 -font Ananda-Hastakchyar label:"$(uid)"@"$(dn)" "$@"
 	convert -channel RGBA -background none -fill black -pointsize 16 -font Scriptina label:"$(uid)"@"$(dn)" "$@"
 
