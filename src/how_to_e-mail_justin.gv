@@ -141,7 +141,7 @@ dedicated e-mail service?>,
 
         muanote [URL=<https://en.wikipedia.org/wiki/Comparison_of_e-mail_clients#General_features>,
                  tooltip="Clicking this node goes to a wiki showing a table of MUAs with columns indicating S/MIME and PGP support",
-                 label="", image="muas.png"];
+                 label="", image="node_muas.png"];
 
         firsttime_br [label=<Are you e-mailing Justin securely<br/>for the first time, or has his key expired?>, tooltip="You'll need to have Justin's key before sending him a message.  Once you have it, it's good until it expires (few years generally)."];
         //firsttime_br -> ea_forced_br [label="Yes (using PGP)"];
