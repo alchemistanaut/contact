@@ -207,8 +207,8 @@ dedicated e-mail service?>,
         acquire_smimekey -> acquire_by_email [style=dotted, color=brown, fontcolor=brown, labelfloat=false, label="or alternatively"];
         */
         
-        // Gnu make will replace @releaseurl@ and @pdfpassword@ with the proper text
-        pdf_acquire_key [URL="@releaseurl@/pubkeys_aes.pdf",
+        // Gnu make will replace @pdfurl@ and @pdfpassword@ with the proper text
+        pdf_acquire_key [URL="@pdfurl@/pubkeys_aes.pdf",
                          tooltip="Clicking this will open a PDF container holding keys to choose from",
                          label=<Import Justin's key.<br align="left"/>Click on this node<br align="left"/>and use password<br align="left"/><font face="courier">@pdfpassword@</font><br align="left"/>to open the PDF.<br align="left"/>>];
         pdf_acquire_key -> ea_forced_ea_short;
