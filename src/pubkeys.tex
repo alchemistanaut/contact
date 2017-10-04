@@ -33,7 +33,7 @@
 
 \input{work/pubkeys_files.tex} % <= read auto-generated file to define commands for \pgplegal, \pgpwork, etc.
 
-\newcommand{\pgpkey}{spare}
+\newcommand{\friendetal}{friend\textsuperscript{(or f.o.f)}/ comrade/ colleague/ classmate/ VIP/ other}
 
 \newcommand{\protonfootnote}{%
   Importing the protonmail key makes it possible to direct mail to
@@ -48,11 +48,10 @@
     The right two columns of the following table have attachments to
     Justin's public keys.  You need to know whether your mail client
     uses S/MIME or PGP.  If you forgot, look back at the
-    \href{https://www.github.com/alchemistanaut/contact/blob/master/build/email.svg}{diagram}.
-    Clicking on an attachment may automatically import it, depending
-    on your the MIME application associations in your environment.  If
-    not, you can right-click, save to a file, then import the key
-    manually.
+    \href{https://alchemistanaut.github.io/}{diagram}.  Clicking on an
+    attachment may automatically import it, depending on your the MIME
+    application associations in your environment.  If not, you can
+    right-click, save to a file, then import the key manually.
   \end{multicols}
 
   \rowcolors{2}{Khaki}{LightGoldenrodYellow}
@@ -64,11 +63,11 @@
     & \multicolumn{1}{r}{\textsl{\textbf{then address to}}}%
     & \multicolumn{1}{r}{\textsl{\textbf{using \underline{S/MIME certificate}}}}%
     & \textsl{\textbf{or \underline{PGP key} (binary)}}\\
-    accountant/lawyer                           & \href{mailto:legal\dn}{legal\dn}   & e-mail support\dn\ for a key & \pgplegal\\
-    client/professor/recruiter                  & \href{mailto:work\dn}{work\dn}     & e-mail support\dn\ for a key & \pgpwork\\
-    friend\textsuperscript{(or f.o.f)}/ comrade/ colleague/ classmate/ VIP/ other    & \href{mailto:crypto\dn}{crypto\dn}         & \certcrypto                  & \pgpcrypto\\
-    protonmail sender\footnote{\protonfootnote} & \href{mailto:bletchleylabs\pdn}{bletchleylabs\pdn} & n/a                          & \pgpproton\\
-    stranger                                    & \href{mailto:public\dn}{public\dn} & e-mail support\dn\ for a key & \pgppublic\\
+    accountant/lawyer           & \href{mailto:legal\dn}{legal\dn}   & e-mail support\dn\ for a key & \pgplegal\\
+    client/professor/recruiter  & \href{mailto:work\dn}{work\dn}     & e-mail support\dn\ for a key & \pgpwork\\
+    \friendetal                 & \href{mailto:crypto\dn}{crypto\dn} & \certcrypto                  & \pgpcrypto\\
+    protonmail sender\footnote{\protonfootnote} & \href{mailto:bletchleylabs\pdn}{bletchleylabs\pdn} & n/a & \pgpproton\\
+    stranger                    & \href{mailto:public\dn}{public\dn} & e-mail support\dn\ for a key & \pgppublic\\
   \end{tabular}
 \end{minipage}
 
