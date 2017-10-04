@@ -223,7 +223,7 @@ dedicated e-mail service?>,
 
         acquire_by_email [fixedsize=true, width=2, height=0.6,
                           labelloc=t, labeljust=l, label="Ask Justin for a key at:",
-                          imagescale=width, imagepos="bc", image="suprt_ea.png",
+                          imagescale=width, imagepos="bc", image="node_item_suprt_ea.png",
                           tooltip="Be sure to tell Justin whether you need a PGP key or an S/MIME certificate, or tell him your mail client.  E-mailing is probably easier than the self-service PDF option, but obviously it's not instant."];
         acquire_by_email -> ea_forced_ea_short;
 
@@ -265,7 +265,7 @@ get_support [URL=<https://github.com/alchemistanaut/contact/issues>,
              fixedsize=true, width=2, height=1.4,
              labelloc=t, labeljust=l, label="File a github issue by\lclicking this node, or\lE-mail Justin at:\l",
              tooltip="Clicking will bring you to the github issues page, where you can describe your issue.  Note that you'll need a github account to create an issue, and your entry will be publicly viewable.  Alternatively, you can e-mail support questions to the address herein, in the clear if needed.",
-             imagescale=width, imagepos="bc", image="suprt_ea.png"];
+             imagescale=width, imagepos="bc", image="node_item_suprt_ea.png"];
 
 { rank=same; celebrate; problem_br; screwed; }
 { rank=same; web_ea; crypto_ea; }
