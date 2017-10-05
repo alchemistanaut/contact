@@ -21,21 +21,23 @@ release_url=https://github.com/alchemistanaut/contact/releases/tag/v2017.1.0
 uid = support
 dn  = gombos.info
 
-# password for the PDF file containing public keys (which have metadata bots shouldn't see)
+# password for the PDF file containing public keys (which have metadata that bots shall not see)
 pdfpassword = wildthing
 
 output_dir = build
 src_dir    = src
 work_dir   = work
+pub_dir    = ../poc_web
+
 #SUBDIRS = $(output_dir)
-basename = how_to_e-mail_justin
-products = $(output_dir)/$(basename).svg\
+product_basename = how_to_e-mail_justin
+products = $(output_dir)/$(product_basename).svg\
 	   $(output_dir)/node_email_addresses.png\
 	   $(output_dir)/node_muas.png\
 	   $(output_dir)/node_webmail_addresses.png\
            $(output_dir)/pubkeys_aes.pdf\
 	   $(output_dir)/node_item_suprt_ea.png\
-	   $(work_dir)/$(basename)_ugly.svg\
+	   $(work_dir)/$(product_basename)_ugly.svg\
 	   $(work_dir)/node_email_addresses.aux\
 	   $(work_dir)/node_email_addresses.log\
 	   $(work_dir)/node_email_addresses.pdf\
@@ -86,7 +88,7 @@ $(output_dir)/%.svg: $(work_dir)/%.dvi
 # Renders ugly machine-generated SVG code from a graphviz file.
 # Some string replacements are done with sed:
 #
-# @pdfurl@      <= replaced by $(pub_url)/data
+# @pdfurl@      <= replaced by $(release_url) <= cannot use pub_url b/c it opens using pdf.js, which lacks pdf attachment handling.
 # @pdfpassword@ <= replaced by $(pdfpassword)
 #
 # URLs are also inserted into the SVG file by sed, because graphviz
@@ -95,7 +97,11 @@ $(work_dir)/%_ugly.svg: $(src_dir)/%.gv
 	cd $(output_dir)/; dot -Tsvg:svg:core ../"$<" > ../"$@"; # better font and working URLs, but nodes are not embedded
 	#cd $(work_dir); dot -Tsvg:svg:core ../"$<" > ../"$@"; # better font and working URLs, but nodes are not embedded
 	#cd $(output_dir)/; dot -Tsvg:cairo:cairo -Nfontname=Arial ../"$<" > ../"$@"; # nodes are embeeded but URLs broken
-	sed -i -e "/[.]png/s![^\"]*.png!$(pub_url)/images/&!gi;/@pdfurl@/s!@pdfurl@!$(pub_url)/data!gi;/@pdfpassword@/s!@pdfpassword@!$(pdfpassword)!gi" "$@"
+	sed -i -e '/[<]a xlink:href/s!xlink:href!xlink:show=\"new\" &!'\
+               -e '/pubkeys_aes.pdf/s!xlink:href!id="pdflink-svg" &!'\
+	       -e "/[.]png/s![^\"]*.png!$(release_url)/&!gi"\
+	       -e "/@pdfurl@/s!@pdfurl@!$(release_url)!gi"\
+               -e "/@pdfpassword@/s!@pdfpassword@!$(pdfpassword)!gi" "$@"
 
 # Make the SVG file pretty.  Note that svgpp introduces artifacts
 # (extra whitespace on the rendered diagram), so it's disabled until
@@ -109,18 +115,21 @@ $(output_dir)/%.svg: $(work_dir)/%_ugly.svg
 $(work_dir)/pubkeys.pdf: $(work_dir)/pubkeys_files.tex
 
 # it's a shame we depend on node_muas.png instead of node_muas.svg, but svg images render blank
-$(output_dir)/$(basename).svg: $(output_dir)/node_item_suprt_ea.png $(output_dir)/node_webmail_addresses.png $(output_dir)/node_email_addresses.png $(output_dir)/node_muas.png $(output_dir)/pubkeys_aes.pdf
+$(output_dir)/$(product_basename).svg: $(output_dir)/node_item_suprt_ea.png $(output_dir)/node_webmail_addresses.png $(output_dir)/node_email_addresses.png $(output_dir)/node_muas.png $(output_dir)/pubkeys_aes.pdf
 
 $(output_dir)/node_item_suprt_ea.png:
 #	convert -channel RGBA -background none -fill black -pointsize 16 -font Ananda-Hastakchyar label:"$(uid)"@"$(dn)" "$@"
 	convert -channel RGBA -background none -fill black -pointsize 16 -font Scriptina label:"$(uid)"@"$(dn)" "$@"
 
-all: $(output_dir)/$(basename).svg
+all: $(output_dir)/$(product_basename).svg
 
 clean:
 	-rm -f $(products) */*~ *~ src/*aux src/*log src/*out src/*dvi
 
 deploy:
-	cp $(output_dir)/*.svg $(output_dir)/*.pdf ../poc_web/data/
-	cp $(output_dir)/*.png ../poc_web/images/
-	cp README.md ../poc_web/
+	cp README.md $(pub_dir)
+	cp $(output_dir)/*.pdf $(pub_dir)/data/
+	cp $(output_dir)/*.png $(pub_dir)/images/
+	sed -e "/href.*png/s!$(release_url).\(.*[.]png\"\)!$(pub_url)/images/\1!g"\
+            -e "/href.*[ps][dv][fg]/s!$(release_url).\([^\"]*\"\)!$(pub_url)/data/\1!g"\
+            $(output_dir)/*.svg > $(pub_dir)/data/$(product_basename).svg
