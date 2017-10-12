@@ -33,10 +33,11 @@ pub_dir    = ../poc_web
 product_basename = how_to_e-mail_justin
 products = $(output_dir)/$(product_basename).svg\
 	   $(output_dir)/node_email_addresses.png\
+	   $(output_dir)/node_item_suprt_ea.png\
 	   $(output_dir)/node_muas.png\
 	   $(output_dir)/node_webmail_addresses.png\
+	   $(output_dir)/outlook_smime_setup.pdf\
            $(output_dir)/pubkeys_aes.pdf\
-	   $(output_dir)/node_item_suprt_ea.png\
 	   $(work_dir)/$(product_basename)_ugly.svg\
 	   $(work_dir)/node_email_addresses.aux\
 	   $(work_dir)/node_email_addresses.log\
