@@ -73,6 +73,9 @@ $(output_dir)/%_aes.pdf: $(work_dir)/%.pdf
 $(work_dir)/%.pdf: $(src_dir)/%.tex
 	pdflatex -output-directory $(work_dir)/ "$<"
 
+$(output_dir)/%.pdf: $(work_dir)/%.pdf
+	mv "$<" "$@"
+
 $(work_dir)/%.dvi: $(src_dir)/%.tex
 	latex -output-directory $(work_dir)/ "$<"
 
@@ -121,7 +124,7 @@ $(output_dir)/node_item_suprt_ea.png:
 #	convert -channel RGBA -background none -fill black -pointsize 16 -font Ananda-Hastakchyar label:"$(uid)"@"$(dn)" "$@"
 	convert -channel RGBA -background none -fill black -pointsize 16 -font Scriptina label:"$(uid)"@"$(dn)" "$@"
 
-all: $(output_dir)/$(product_basename).svg
+all: $(output_dir)/$(product_basename).svg $(output_dir)/outlook_smime_setup.pdf
 
 clean:
 	-rm -f $(products) */*~ *~ src/*aux src/*log src/*out src/*dvi
