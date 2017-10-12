@@ -47,6 +47,10 @@ products = $(output_dir)/$(product_basename).svg\
 	   $(work_dir)/node_webmail_addresses.aux\
 	   $(work_dir)/node_webmail_addresses.log\
 	   $(work_dir)/node_webmail_addresses.pdf\
+	   $(work_dir)/outlook_smime_setup.aux\
+	   $(work_dir)/outlook_smime_setup.log\
+	   $(work_dir)/outlook_smime_setup.out\
+	   $(work_dir)/outlook_smime_setup.toc\
 	   $(work_dir)/pubkeys.aux\
 	   $(work_dir)/pubkeys.log\
 	   $(work_dir)/pubkeys.out\
