@@ -167,7 +167,7 @@ dedicated e-mail service?>,
         pgpnote [label="PGP users: once you\lhave a key pair, you\lcan send your public\lkey as an attachment\lor publish it on a\lkeyserver.\l"
                  tooltip="PGP key generation is a simple process."];
 
-        web_ea [label="", image="node_webmail_addresses.png", tooltip="The script font is to mitigate OCR-capable bot-executed address harvesting (to some extent)."];
+        web_ea [label="", image="node_webmail_addresses.png", tooltip="The hushmail address us useable until Dec.31, 2018.  The script font in this node is to mitigate OCR-capable bot-executed address harvesting (to some extent)."];
         web_ea -> webnote [arrowhead=none, style=dotted];
         /*web_ea:other -> crypto_mua_br;
         web_ea:hm -> celebrate;
@@ -209,13 +209,13 @@ dedicated e-mail service?>,
         
         // Gnu make will replace @pdfurl@ and @pdfpassword@ with the proper text
         pdf_acquire_key [URL="@pdfurl@/pubkeys_aes.pdf",
-                         tooltip="Clicking this will open a PDF container holding keys to choose from",
+                         tooltip="Clicking this will open a PDF container holding keys to choose from.  Warning: if using an old browser, you may have to download the PDF and view in an external viewer.",
                          label=<Import Justin's key.<br align="left"/>Click on this node<br align="left"/>and use password<br align="left"/><font face="courier">@pdfpassword@</font><br align="left"/>to open the PDF.<br align="left"/>>];
         pdf_acquire_key -> ea_forced_ea_short;
         //pdf_acquire_key -> acquire_by_email [style=dotted, color=brown, fontcolor=brown, labelfloat=false, label="or alternatively"];
 
         ea_forced_ea_short [label="Use the address associated\lwith the key", tooltip="If you don't know the address associated to the key, it will generally be the address from which Justin sent you the key.  If you took the key from the PDF file, then it's evident from that file.  PGP users: if you imported Justin's key from a PGP key server, then you should look at the table of addresses and select the best one.  But note that you may have to configure your mail client to map key to address because Justin's published PGP keys have a deliberately unusable address."];
-        ea_forced_ea_short -> celebrate;
+        ea_forced_ea_short -> celebrate [color=green, fontcolor=green];
 
         crypto_ea [label="", image="node_email_addresses.png",
                    tooltip="The different addresses help Justin filter and reduce impact on others if one address is attacked, but there is no difference as far as spam scoring.  The rasterized script font is to mitigate OCR-capable bot-executed address harvesting (to some extent)."];
