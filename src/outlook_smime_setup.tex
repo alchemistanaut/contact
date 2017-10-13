@@ -24,6 +24,11 @@
 \usepackage{multicol}
 \usepackage{wrapfig}
 
+\newcommand{\yesbad}{\textcolor{red}{yes}}
+\newcommand{\nogood}{\textcolor{ForestGreen}{no}}
+\newcommand{\yesgood}{\textcolor{ForestGreen}{yes}}
+\newcommand{\nobad}{\textcolor{red}{no}}
+
 \title{\rmfamily Configuring Outlook's built-in Cryptosystem}
 %\newcommand{\theauthor}{J.G.}
 %\author{\rmfamily\theauthor}
@@ -41,24 +46,53 @@
 
 \section{Prerequisites}
 \begin{itemize}
-\item Workstation with a Mozilla-based browser (e.g. Firefox) or
-  Internet Explorer installed.  IE may be simpler because it seems to
-  automatically store the key where Outlook needs it.  Chrome/Chromium
-  will not work because it cannot handle key generation (as of the
-  time of this composition).
-\item MS Outlook 2013 or later (earlier versions officially support
-  S/MIME but users often report difficulties, particularly with
-  Outlook 2010)
+\item MS Outlook 2013 or later, ideally (earlier versions officially
+  support S/MIME but users often report difficulties, particularly
+  with Outlook 2010)
+\item Any of these browsers installed:
+
+  \begin{tabular}{lp{65mm}p{0.3\textwidth}}
+    \textsl{\textbf{Browser}}        & \textsl{\textbf{Key storage consistent with Outlook (thus simpler to setup)}} & \textsl{\textbf{Notes}}\\
+    Chrome/Chromium                  & \nobad   & some versions of Chrome have problems with key generation\\
+    Firefox                          & \nobad   &\\
+    Internet Explorer \tiny(OS/X)    & ?        &\\
+    Internet Explorer \tiny(Windows) & \yesgood &\\
+    Safari \tiny(OS/X)               & \yesgood & some versions of Safari have problems with key generation\\
+    Safari \tiny(Windows)            & ?        &\\
+  \end{tabular}
+
+  The browser is only needed initially to create SSL keys, and will
+  not be used thereafter.  Browsers above that are indicated not to
+  share the same key storage as Outlook may still be used, but there
+  will be some extra configuration steps to copy the user's keys
+  (sections~\ref{chrome_export} and~\ref{ff_export}).
 \end{itemize}
 
+\section{Instructional videos}
+These videos are optional; not required by this guide.
+
+\begin{tabular}{llllp{0.4\textwidth}}
+  Link & Outlook ver. & Browser ver. & CA & Scope + Notes\\
+  \href{https://www.youtube.com/watch?v=6OxOo-w3Ymo}{6OxOo-w3Ymo}
+  & 2007 & n/a & n/a &\\
+  \href{https://www.youtube.com/watch?v=wGHaB0elkaA}{wGHaB0elkaA}
+  & 2010 & Firefox & Symantec & Demonstrates how to use Firefox and manually copy the key pair into Outlook.\\
+  \href{https://www.youtube.com/watch?v=n3rOEpGjrc}{n3rOEpGjrc}
+  & 2013 & Chrome & Comodo & \\
+  \href{https://www.youtube.com/watch?v=sfancZGEGjg\&start=535}{sfancZGEGjg}
+  & 2013-2016 & IE? & Comodo & This comprehensive video covers every step in this entire document.  It demonstrates a case where the browser automatically installs the key where Outlook can find it.  The first 9 min. of the video is blather, but the link supplied skips to the relevant part.\\
+  \href{https://www.youtube.com/watch?v=4fmBzeq8BVA}{4fmBzeq8BVA}
+  & 2016 & IE? & Entrust & Outlook had automatic visibility to the key in this demo on Windows, so IE was likely used.\\
+\end{tabular}
+
 \section{Prep to receive encrypted mail or to send signed mail}
-\subsection{YouTube video (alternative to this document)}
-For Outlook 2013 and 2016 users there is a comprehensive YouTube video
-demonstrating whole process using Comodo for the certificate
-authority.  It starts with nine minutes of blather, but {\large
-  \href{https://www.youtube.com/watch?v=sfancZGEGjg\&start=535}{this
-    link}} skips straight to the relevant part.  That video is
-detailed enough to replace this entire document.
+% \subsection{YouTube video (alternative to this document)}
+% For Outlook 2013 and 2016 users there is a comprehensive YouTube video
+% demonstrating whole process using Comodo for the certificate
+% authority.  It starts with nine minutes of blather, but {\large
+%   \href{https://www.youtube.com/watch?v=sfancZGEGjg\&start=535}{this
+%     link}} skips straight to the relevant part.  That video is
+% detailed enough to replace this entire document.
 
 \subsection{Get an S/MIME certificate}\label{catable}
 In your browser go to one of these certificate authorities (\textbf{Justin recommends Comodo via Secorio}):\\
@@ -108,7 +142,7 @@ In your browser go to one of these certificate authorities (\textbf{Justin recom
     automatically use Firefox or IE to open URLs, right-click that
     button instead, copy the URL, and paste it in the address bar to
     force it to render in Firefox or IE.
-  \item Skip to section~\ref{browser_export}
+  \item Skip to section~\ref{cert_install}
   \end{enumerate}
 \end{multicols}
 
@@ -116,33 +150,35 @@ In your browser go to one of these certificate authorities (\textbf{Justin recom
 Simply follow the instructions on the website of the CA.  It will
 generally involve filling out a form and confirming an e-mail.
 
-\subsection{Installing your certificate into Outlook}\label{browser_export}
+\subsection{Installing your certificate into Outlook}\label{cert_install}
+If you created your key using a browser that uses the same key storage
+as Outlook (as indicated in the ``Prerequisites''), skip this section
+and go to section~\ref{outlookcfg}.
 
-Generally you will follow
-\href{https://www.ablebits.com/office-addins-blog/2014/04/11/email-encryption-outlook/}{this
-  document}.  Ignore the top portion because you already have a
-``digital ID''.  Scroll down to ``How to set up your e-mail
-certificate in Outlook''.  That will configure Outlook for using your
-certificate.
+\subsubsection{Export your key from your browser (Chrome)}\label{chrome_export}
+There are multiple browsers which do not share the same key storage as
+Outlook, but this section presumes you are using Chrome.  Follow
+\href{https://www.youtube.com/watch?v=n3rOEpGjrc\&start=310}{YouTube
+  video n3rOEpGjrc} (the link of which jumps you to the relevant point
+in the video).  Then skip to section~\ref{import}.
 
-That process assumes Outlook already has your key automatically, and
-thus no export/import are needed.  If there are no issues with the key
-assignment step (that is, you were able to find your Comodo key), then
-you can skip the rest of the section.
+\subsubsection{Export your key from your browser (Firefox)}\label{ff_export}
+There are multiple browsers which do not share the same key storage as
+Outlook, but this section presumes you are using Firefox.  Watch
+\href{https://www.youtube.com/watch?v=wGHaB0elkaA\&start=226}{YouTube
+  video wGHaB0elkaA} or follow the steps below to export the key from
+the Firefox and then import it into Outlook.
 
-\subsubsection{If the key was not in the Trust Center..}
-Some Outlook users have reported that in their environment (Windows
-and Outlook versions) the key is not automatically visible in Outlook.
-\textbf{If your Comodo key was not found} in the Outlook ``Trust
-Center'', then watch
-\href{https://www.youtube.com/watch?v=wGHaB0elkaA}{this YouTube video}
-or follow the steps below to export the key from the browser and then
-import it into Outlook.  That video demonstrates using Outlook 2010
-for the mail client and Firefox for the browser.  Ignore the beginning
-segment about using Symantec to create a key (Symantec no longer
-offers the service; Comodo is recommended).
+The video demonstrates using Outlook 2010 for the mail client and
+Firefox (a pre-2012 version) for the browser.  The first few minutes
+start by walking through key creation on Symantec's website, which is
+useless because Symantec no longer offers the service.  So the YouTube
+link skips that portion of the video automatically.
+% Note that the speaker elects to use the (now obsolete) hash
+% algorithm SHA-1.  Ignore that advice and just go with the default.
 
-These steps assume Firefox was used for the key creation:
+If not following the above-mentioned video, these are the steps to
+export from a more recent version of Firefox:
 
 \begin{enumerate}
   \item (Firefox) go to: menu ($\equiv$) $\gg$ Options/Preferences $\gg$ Advanced
@@ -162,21 +198,50 @@ These steps assume Firefox was used for the key creation:
   backup file.  A weak password is fine, because this backup file will
   not be transmitted or retained for long.  You will import it into
   Outlook locally, and then you will delete the backup file.
-\item Now your private key must be imported into Outlook.  I'm not
-  entirely sure how to do it, but
-  \href{https://www.ablebits.com/office-addins-blog/2014/04/11/email-encryption-outlook/}{this
-    document} gives the steps for configuring Outlook as
-  needed. Ignore the top of the document because you already have a
-  ``digital ID'', and scroll down to ``How to set up your e-mail
-  certificate in Outlook''.  This will take you to the ``Trust
-  Center'', the place in the settings where you can import the key
-  from the backup file.
+\end{enumerate}
+
+\subsubsection{Import your key into Outlook}\label{import}
+Watch
+% these are actually the config steps -- probably should be in the next section!
+%\href{https://www.youtube.com/watch?v=4fmBzeq8BVA\&start=107}{YouTube
+%  video 4fmBzeq8BVA} (the link of which jumps you to the relevant
+%point in the video)
+\href{https://www.youtube.com/watch?v=n3rOEpGjrc\&start=390}{YouTube
+  video n3rOEpGjrc} (the link of which jumps you to the relevant
+point in the video)
+or follow the steps below to import your key into Outlook 2013.
+\begin{enumerate}
+\item Go to File $\gg$ Options $\gg$ Trust Center (left pane) $\gg$ Trust Center Settings..
+\item Go to Email Security (left pane) $\gg$ Digital IDs (Certificates) $\gg$ ``\texttt{Import/Export}'' (button)
+\item Click ``\texttt{Browse..}'' (button)
+\item Select the backup file produced in section~\ref{chrome_export} or~\ref{ff_export}.
+\item In the ``\texttt{Password}'' field enter the password that was chosen at the end of section~\ref{chrome_export} or~\ref{ff_export}.
+\item Click ``\texttt{OK}'' in the pop-up dialog and the next window.
+% these are actually the config steps -- probably should be in the next section!
+%\item Go to Email Security (left pane) $\gg$ Settings.. (button)
+%\item Choose an arbitrary name for the field \texttt{Security Settings Name} (e.g. ``Comodo'')
+%\item Tick the box for ``\texttt{Default Security Settings for this cryptographic message format}''
+%\item Click ``\texttt{Choose..}'' to the right of ``\texttt{Signing Certificate}''
+%\item You'll likely only have one key, and it will be selected automatically.  Otherwise select the most recent key, and click ``\texttt{OK}''
 \item After the key is imported into Outlook, you should delete the
   backup file.  (You can always create a new backup file from Firefox
   if needed).
 \end{enumerate}
 
-\subsection{Distribute your S/MIME certificate (aka public key)}
+\subsection{Configuring Outlook}\label{outlookcfg}
+Follow
+\href{https://www.ablebits.com/office-addins-blog/2014/04/11/email-encryption-outlook/#setup-email-certificate}{this
+  document}.  That link skips the top portion and takes you straight
+to ``How to set up your e-mail certificate in Outlook'' because you
+already have a ``digital ID''.  That will configure Outlook for using
+your certificate.
+
+% That process assumes Outlook already has your key automatically, and
+% thus no export/import are needed.  If there are no issues with the key
+% assignment step (that is, you were able to find your Comodo key), then
+% you can skip to section~\ref{distribution}.
+
+\subsection{Distribute your S/MIME certificate (aka public key)}\label{distribution}
 In short: simply send an e-mail to the recipient using Outlook, and sign the message.\\
 
 Detailed explanation: You have a pair of keys (these were created in
