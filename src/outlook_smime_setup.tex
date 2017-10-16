@@ -1,11 +1,11 @@
 % Copyright 2017 Justin Gombos
-% 
+%
 % Licensed under the Apache License, Version 2.0 (the "License");
 % you may not use this file except in compliance with the License.
 % You may obtain a copy of the License at
-% 
+%
 %     http://www.apache.org/licenses/LICENSE-2.0
-% 
+%
 % Unless required by applicable law or agreed to in writing, software
 % distributed under the License is distributed on an "AS IS" BASIS,
 % WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,8 +14,8 @@
 
 \documentclass[pdftex,12pt,titlepage=false]{scrartcl}
 
-\usepackage[svgnames]{xcolor} %for LightGoldenrodYellow
-\usepackage[margin=15mm,bottom=10mm,pdftex,letterpaper]{geometry}
+\usepackage[table,dvipsnames,svgnames]{xcolor} % for LightGoldenrodYellow (loads also »colortbl«)
+\usepackage[margin=20mm,bottom=10mm,pdftex,letterpaper]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc} %suggested to avoid ``OT1 encoding''
 \usepackage{hyperref}
@@ -24,12 +24,13 @@
 \usepackage{multicol}
 \usepackage{wrapfig}
 
+
 \newcommand{\yesbad}{\textcolor{red}{yes}}
 \newcommand{\nogood}{\textcolor{ForestGreen}{no}}
 \newcommand{\yesgood}{\textcolor{ForestGreen}{yes}}
 \newcommand{\nobad}{\textcolor{red}{no}}
 
-\title{\rmfamily Configuring Outlook's built-in Cryptosystem}
+\title{\rmfamily Configuring Outlook's built-in Cryptosystem (Mac \& Windows)}
 %\newcommand{\theauthor}{J.G.}
 %\author{\rmfamily\theauthor}
 \date{\rmfamily\today}
@@ -37,6 +38,15 @@
 \newcommand{\comment}[1]{} %inline comment by gobbling the argument
 
 \newcommand{\secorio}{\href{https://www.secorio.com/}{\includegraphics[width=2cm]{images/logo_comodo.png}\tiny via Secorio}}
+
+\newcommand{\safaricaveat}{\tiny(Safari automatically installs S/MIME
+  keys on a ``Keychain Access''-reachable keyring.  According to
+  \href{https://support.comodo.com/index.php?/Knowledgebase/Article/View/1177/37/apple-mail-and-outlook-for-os-x-smime-installation}{%
+    Comodo docs} and
+  \href{https://technet.microsoft.com/en-us/library/jj984223(v=office.16).aspx}{MS
+    docs}, Outlook uses Keychain Access.)}
+
+\newcommand{\keystoreintl}{\tiny(browser uses its own internal key store)}
 
 \begin{document}
 
@@ -49,30 +59,33 @@
 \item MS Outlook 2013 or later is recommended.  Earlier versions
   officially support S/MIME but users often report difficulties,
   particularly with Outlook 2010.
-\item Any of these browsers installed:
+\item A browser is only needed initially to create SSL keys, and will
+  not be used thereafter.  Any of these browsers will work:
+  \rowcolors{2}{Khaki}{LightGoldenrodYellow} %this breaks old versions of dvisvgm!
 
-  \begin{tabular}{lp{65mm}p{0.3\textwidth}}
+  \begin{tabular}{lp{65mm}>{\small}p{0.3\textwidth}}
     \textsl{\textbf{Browser}}        & \textsl{\textbf{Key storage consistent with Outlook (thus simpler to setup)}} & \textsl{\textbf{Notes}}\\
-    Chrome/Chromium                  & \nobad   & some versions of Chrome have problems with key generation\\
-    Firefox                          & \nobad   &\\
-    Internet Explorer \tiny(OS/X)    & ?        &\\
-    Internet Explorer \tiny(Windows) & \yesgood &\\
-    Safari \tiny(OS/X)               & \yesgood & some versions of Safari have problems with key generation\\
-    Safari \tiny(Windows)            & ?        &\\
+    Chrome/Chromium \tiny(OS/X)      & \yesgood                & Some versions of Chrome have problems with key generation\\
+    Chrome/Chromium \tiny(Windows)   & \nobad\ \keystoreintl   &\\
+    Firefox \tiny(all platforms)     & \nobad\ \keystoreintl   &\\
+    Internet Explorer \tiny(OS/X)    & --                      & Don't use IE on Mac; it's discontinued and last version is IE4.\\
+    Internet Explorer \tiny(Windows) & \yesgood                &\\
+    Safari \tiny(OS/X)               & \yesgood\ \safaricaveat & Some versions of Safari have problems with key generation\\
+    Safari \tiny(Windows)            & ? \tiny(undocumented, left as an exercise for the readers ;]) &\\
   \end{tabular}
 
-  The browser is only needed initially to create SSL keys, and will
-  not be used thereafter.  Browsers above that are indicated not to
-  share the same key storage as Outlook (e.g. Firefox) may still be
-  used, but there will be some extra configuration steps to copy the
-  user's keys (sections~\ref{chrome_export} and~\ref{ff_export}).
+  Browsers above that are indicated not to share the same key storage
+  as Outlook (e.g. Firefox) may still be used, but there will be some
+  extra configuration steps to copy the user's keys
+  (sections~\ref{chrome_export} and~\ref{ff_export}).
 \end{itemize}
 
 \section{Instructional videos (optional)}
-These videos are optional; not required by this guide.
+These videos are optional; not required by this guide.\\[0.5em]
 
+\rowcolors{2}{Khaki}{LightGoldenrodYellow} %this breaks old versions of dvisvgm!
 \begin{tabular}{llllp{0.4\textwidth}}
-  Link & Outlook ver. & Browser ver. & CA & Scope + Notes\\
+  \slshape\textbf{Link} & \slshape\textbf{Outlook ver.} & \slshape\textbf{Browser ver.} & \slshape\textbf{CA} & \slshape\textbf{Scope + Notes}\\
   \href{https://www.youtube.com/watch?v=6OxOo-w3Ymo}{6OxOo-w3Ymo}
   & 2007 & n/a & n/a &\\
   \href{https://www.youtube.com/watch?v=wGHaB0elkaA}{wGHaB0elkaA}
@@ -98,14 +111,17 @@ These videos are optional; not required by this guide.
 In your browser go to one of these certificate authorities (\textbf{Justin recommends Comodo via Secorio}):\\
 
 \begin{tabular}{lp{2.3cm}l>{\tiny}l}
-  \slshape certificate authority (``CA'')& \slshape price \newline\tiny(for non-commercial individual use) & \slshape validity & \slshape\normalsize notes\\
-  \hline\\
+  \slshape certificate authority (``CA'')
+  & \slshape price \newline\tiny(for non-commercial individual use)
+  & \slshape validity
+  & \slshape\normalsize notes\\
+  %\hline\\
   \href{https://www.cacert.org/}{\includegraphics[width=2cm]{images/logo_cacert4.png}} & gratis & 6|24 mos.\tiny (\href{http://wiki.cacert.org/FAQ/Privileges}{criteria}) & community driven\\
   \href{https://secure.comodo.com/products/frontpage?area=SecureEmailCertificate}{\includegraphics[width=2cm]{images/logo_comodo.png}\tiny direct} & gratis & 1 yr &\\
   \href{https://www.instantssl.com/ssl-certificate-products/free-email-certificate.html}{\includegraphics[width=2cm]{images/logo_comodo.png}\tiny via InstantSSL} & gratis & 1 yr &\\
   \secorio & gratis & 1 yr & recommended; assumed choice by this guide\\
-  \href{https://www.entrust.com/secure-email-certificates/}{\includegraphics[width=2cm]{images/logo_entrust.png}} & $\geq$\$20 & \\
-  \href{https://www.identrust.com/certificates/trustid.html}{\includegraphics[width=2cm]{images/logo_trustid.png}} & $\geq$\$19 & \\
+  \href{https://www.entrust.com/secure-email-certificates/}{\includegraphics[width=2cm]{images/logo_entrust.png}} & $\geq$\$20 & &\\
+  \href{https://www.identrust.com/certificates/trustid.html}{\includegraphics[width=2cm]{images/logo_trustid.png}} & $\geq$\$19 & &\\
   \href{https://www.startcomca.com/}{\includegraphics[width=2cm]{images/logo_startcom.png}} & gratis & 2 yrs & \\
   \href{https://buy.wosign.com/free/}{wosign} & gratis? & 2 yrs? & blocks tor?\\
 \end{tabular}\\
@@ -118,7 +134,7 @@ In your browser go to one of these certificate authorities (\textbf{Justin recom
   obsolete as this guide ages.  Consequently it might be interesting
   to check out the catalog of certificate authorities listed at
   \url{http://kb.mozillazine.org/Getting_an_SMIME_certificate}).}
-\newpage
+
 \subsubsection{If you chose ``Comodo via Secorio''}
 \begin{multicols}{2}
   \begin{enumerate}
@@ -161,6 +177,8 @@ Outlook, but this section presumes you are using Chrome.  Follow
 \href{https://www.youtube.com/watch?v=n3rOEpGjrc\&start=310}{YouTube
   video n3rOEpGjrc} (the link of which jumps you to the relevant point
 in the video), or follow these steps:
+
+\begin{minipage}{\textwidth}% This minipage inhibits page splitting
 \begin{multicols}{2}
   \begin{enumerate}
   \item After creating the certificate (previous section) Chrome
@@ -183,7 +201,9 @@ in the video), or follow these steps:
     locally, and then you will delete the backup file.
   \end{enumerate}
 \end{multicols}
+\end{minipage}
 
+\vspace{1em}
 Then skip to section~\ref{import} for steps to import the key into
 Outlook.
 
@@ -226,40 +246,73 @@ export from a more recent version of Firefox:
 \end{enumerate}
 
 \subsubsection{Import your key into Outlook}\label{import}
-Watch
-% these are actually the config steps -- probably should be in the next section!
-%\href{https://www.youtube.com/watch?v=4fmBzeq8BVA\&start=107}{YouTube
-%  video 4fmBzeq8BVA} (the link of which jumps you to the relevant
-%point in the video)
-\href{https://www.youtube.com/watch?v=n3rOEpGjrc\&start=390}{YouTube
-  video n3rOEpGjrc} (the link of which jumps you to the relevant
-point in the video)
-or follow the steps below to import your key into Outlook 2013.
-\begin{enumerate}
-\item Go to File $\gg$ Options $\gg$ Trust Center (left pane) $\gg$ Trust Center Settings..
-\item Go to Email Security (left pane) $\gg$ Digital IDs (Certificates) $\gg$ ``\texttt{Import/Export}'' (button)
-\item Click ``\texttt{Browse..}'' (button)
-\item Select the backup file that was produced in section~\ref{chrome_export} or~\ref{ff_export}.
-\item In the ``\texttt{Password}'' field enter the password that was chosen at the end of section~\ref{chrome_export} or~\ref{ff_export}.
-\item Click ``\texttt{OK}'' in the pop-up dialog and the next window.
-% these are actually the config steps -- probably should be in the next section!
-%\item Go to Email Security (left pane) $\gg$ Settings.. (button)
-%\item Choose an arbitrary name for the field \texttt{Security Settings Name} (e.g. ``Comodo'')
-%\item Tick the box for ``\texttt{Default Security Settings for this cryptographic message format}''
-%\item Click ``\texttt{Choose..}'' to the right of ``\texttt{Signing Certificate}''
-%\item You'll likely only have one key, and it will be selected automatically.  Otherwise select the most recent key, and click ``\texttt{OK}''
-\item After the key is imported into Outlook, you should delete the
-  backup file.  (You can always create a new backup file from Firefox
-  if needed).
+\begin{minipage}[t]{0.47\textwidth}
+  \centerline{\textsl{(on OS/X)}} Simply double click the
+  \texttt{.p12} backup file that was produced in
+  section~\ref{chrome_export} or~\ref{ff_export}.  OS/X will then
+  import the key into the ``Keychain Access'' tool.  According to
+  according to
+  \href{https://technet.microsoft.com/en-us/library/jj984223(v=office.16).aspx}{MS
+    docs} Outlook 2016 uses Keychain Access.
+
+  Older versions of Outlook may require more steps.  Outlook 2011
+  users should read
+  \href{https://support.microsoft.com/en-us/help/2957671/you-cannot-manage-your-certificates-in-the-mac-os-x-10-9-keychain}{%
+    this doc}.
+\end{minipage}\hfill%
+\begin{minipage}[t]{0.47\textwidth}
+  \centerline{\textsl{(on Windows)}} \vspace{0.5em}Follow
+  Watch
+  % these are actually the config steps -- probably should be in the next section!
+  % \href{https://www.youtube.com/watch?v=4fmBzeq8BVA\&start=107}{YouTube
+  % video 4fmBzeq8BVA} (the link of which jumps you to the relevant
+  % point in the video)
+  \href{https://www.youtube.com/watch?v=n3rOEpGjrc\&start=390}{YouTube
+    video n3rOEpGjrc} (the link of which jumps you to the relevant
+  point in the video)
+  or follow the steps below to import your key into Outlook 2013.
+  \begin{enumerate}
+  \item Go to File $\gg$ Options $\gg$ Trust Center (left pane) $\gg$
+    Trust Center Settings..
+  \item Go to Email Security (left pane) $\gg$ Digital IDs
+    (Certificates) $\gg$ ``\texttt{Import/Export}'' (button)
+  \item Click ``\texttt{Browse..}'' (button)
+  \item Select the backup file that was produced in
+    section~\ref{chrome_export} or~\ref{ff_export}.
+  \item In the ``\texttt{Password}'' field enter the password that was
+    chosen at the end of section~\ref{chrome_export}
+    or~\ref{ff_export}.
+  \item Click ``\texttt{OK}'' in the pop-up dialog and the next
+    window.
+    % these are actually the config steps -- probably should be in the next section!
+    % \item Go to Email Security (left pane) $\gg$ Settings.. (button)
+    % \item Choose an arbitrary name for the field \texttt{Security Settings Name} (e.g. ``Comodo'')
+    % \item Tick the box for ``\texttt{Default Security Settings for this cryptographic message format}''
+    % \item Click ``\texttt{Choose..}'' to the right of ``\texttt{Signing Certificate}''
+    % \item You'll likely only have one key, and it will be selected automatically.  Otherwise select the most recent key, and click ``\texttt{OK}''
+  \item After the key is imported into Outlook, you should delete the
+    backup file.  (You can always create a new backup file from
+    Firefox if needed).
 \end{enumerate}
+\end{minipage}
 
 \subsection{Configuring Outlook}\label{outlookcfg}
-Follow
-\href{https://www.ablebits.com/office-addins-blog/2014/04/11/email-encryption-outlook/#setup-email-certificate}{this
-  document}.  That link skips the top portion and takes you straight
-to ``How to set up your e-mail certificate in Outlook'' because you
-already have a ``digital ID''.  That will configure Outlook for using
-your certificate.
+\begin{minipage}[t]{0.48\textwidth}
+  \centerline{\textsl{(on OS/X)}}
+  \begin{enumerate}
+  \item On the Tools menu, click Accounts.
+  \item Click the account that you want to send a digitally signed message from, click Advanced, and then click the Security tab.
+  \item Under Digital signing, on the Certificate pop-up menu, click the certificate that you want to use.
+  \end{enumerate}
+\end{minipage}\hfill%
+\begin{minipage}[t]{0.48\textwidth}
+  \centerline{\textsl{(on Windows)}} \vspace{0.5em}Follow
+  \href{https://www.ablebits.com/office-addins-blog/2014/04/11/email-encryption-outlook/#setup-email-certificate}{this
+    document}.  That link skips the top portion and takes you straight
+  to ``How to set up your e-mail certificate in Outlook'' because you
+  already have a ``digital ID''.  That will configure Outlook for
+  using your certificate.
+\end{minipage}
 
 % That process assumes Outlook already has your key automatically, and
 % thus no export/import are needed.  If there are no issues with the key
@@ -290,4 +343,3 @@ extract the certificate.  The certificate must then be associated to
 that person in your address book.
 
 \end{document}
-
