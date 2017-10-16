@@ -15,7 +15,7 @@
 \documentclass[pdftex,12pt,titlepage=false]{scrartcl}
 
 \usepackage[svgnames]{xcolor} %for LightGoldenrodYellow
-\usepackage[margin=7mm,bottom=10mm,pdftex,letterpaper]{geometry}
+\usepackage[margin=15mm,bottom=10mm,pdftex,letterpaper]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc} %suggested to avoid ``OT1 encoding''
 \usepackage{hyperref}
@@ -46,9 +46,9 @@
 
 \section{Prerequisites}
 \begin{itemize}
-\item MS Outlook 2013 or later, ideally (earlier versions officially
-  support S/MIME but users often report difficulties, particularly
-  with Outlook 2010)
+\item MS Outlook 2013 or later is recommended.  Earlier versions
+  officially support S/MIME but users often report difficulties,
+  particularly with Outlook 2010.
 \item Any of these browsers installed:
 
   \begin{tabular}{lp{65mm}p{0.3\textwidth}}
@@ -63,12 +63,12 @@
 
   The browser is only needed initially to create SSL keys, and will
   not be used thereafter.  Browsers above that are indicated not to
-  share the same key storage as Outlook may still be used, but there
-  will be some extra configuration steps to copy the user's keys
-  (sections~\ref{chrome_export} and~\ref{ff_export}).
+  share the same key storage as Outlook (e.g. Firefox) may still be
+  used, but there will be some extra configuration steps to copy the
+  user's keys (sections~\ref{chrome_export} and~\ref{ff_export}).
 \end{itemize}
 
-\section{Instructional videos}
+\section{Instructional videos (optional)}
 These videos are optional; not required by this guide.
 
 \begin{tabular}{llllp{0.4\textwidth}}
@@ -98,7 +98,7 @@ These videos are optional; not required by this guide.
 In your browser go to one of these certificate authorities (\textbf{Justin recommends Comodo via Secorio}):\\
 
 \begin{tabular}{lp{2.3cm}l>{\tiny}l}
-  \sl certificate authority (``CA'')& \sl price \newline\tiny(for non-commercial individual use) & \sl validity & \sl\normalsize notes\\
+  \slshape certificate authority (``CA'')& \slshape price \newline\tiny(for non-commercial individual use) & \slshape validity & \slshape\normalsize notes\\
   \hline\\
   \href{https://www.cacert.org/}{\includegraphics[width=2cm]{images/logo_cacert4.png}} & gratis & 6|24 mos.\tiny (\href{http://wiki.cacert.org/FAQ/Privileges}{criteria}) & community driven\\
   \href{https://secure.comodo.com/products/frontpage?area=SecureEmailCertificate}{\includegraphics[width=2cm]{images/logo_comodo.png}\tiny direct} & gratis & 1 yr &\\
@@ -118,7 +118,7 @@ In your browser go to one of these certificate authorities (\textbf{Justin recom
   obsolete as this guide ages.  Consequently it might be interesting
   to check out the catalog of certificate authorities listed at
   \url{http://kb.mozillazine.org/Getting_an_SMIME_certificate}).}
-
+\newpage
 \subsubsection{If you chose ``Comodo via Secorio''}
 \begin{multicols}{2}
   \begin{enumerate}
@@ -155,14 +155,39 @@ If you created your key using a browser that uses the same key storage
 as Outlook (as indicated in the ``Prerequisites''), skip this section
 and go to section~\ref{outlookcfg}.
 
-\subsubsection{Export your key from your browser (Chrome)}\label{chrome_export}
+\subsubsection{(Chrome only) Export your key from your browser}\label{chrome_export}
 There are multiple browsers which do not share the same key storage as
 Outlook, but this section presumes you are using Chrome.  Follow
 \href{https://www.youtube.com/watch?v=n3rOEpGjrc\&start=310}{YouTube
   video n3rOEpGjrc} (the link of which jumps you to the relevant point
-in the video).  Then skip to section~\ref{import}.
+in the video), or follow these steps:
+\begin{multicols}{2}
+  \begin{enumerate}
+  \item After creating the certificate (previous section) Chrome
+    presents a status bar under the address bar saying ``Successfully
+    stored client certificate..''.  Click the ``\texttt{View}'' button
+    on that bar.
+  \item There is a pop-up which showing basic information about your
+    certificate.  Switch to the \texttt{Details} tab.
+  \item Click the ``\texttt{Copy to File}'' button to launch an export
+    wizard.
+  \item Click \texttt{Next}.
+  \item You are asked if you want to export the private key with the
+    certificate.  The default answer is no, but you need to click
+    ``\textbf{\texttt{yes}}'', then \texttt{Next}.
+  \item You are asked which format to use.  Choose \texttt{PKCS\#12},
+    then \texttt{Next}.
+  \item You will be prompted for a password for the backup file.  A
+    weak password is fine, because this backup file will not be
+    transmitted or retained for long.  You will import it into Outlook
+    locally, and then you will delete the backup file.
+  \end{enumerate}
+\end{multicols}
 
-\subsubsection{Export your key from your browser (Firefox)}\label{ff_export}
+Then skip to section~\ref{import} for steps to import the key into
+Outlook.
+
+\subsubsection{(Firefox only) Export your key from your browser}\label{ff_export}
 There are multiple browsers which do not share the same key storage as
 Outlook, but this section presumes you are using Firefox.  Watch
 \href{https://www.youtube.com/watch?v=wGHaB0elkaA\&start=226}{YouTube
@@ -181,7 +206,7 @@ If not following the above-mentioned video, these are the steps to
 export from a more recent version of Firefox:
 
 \begin{enumerate}
-  \item (Firefox) go to: menu ($\equiv$) $\gg$ Options/Preferences $\gg$ Advanced
+  \item Go to: menu ($\equiv$) $\gg$ Options/Preferences $\gg$ Advanced
   $\gg$ Certificates $\gg$ View Certificates $\gg$ Your Certificates.\\[1em]%
   \includegraphics[width=0.7\textwidth]{images/firefox_cert_settings.png}
 \item Highlight the line showing your new key.  It will be under the
@@ -214,7 +239,7 @@ or follow the steps below to import your key into Outlook 2013.
 \item Go to File $\gg$ Options $\gg$ Trust Center (left pane) $\gg$ Trust Center Settings..
 \item Go to Email Security (left pane) $\gg$ Digital IDs (Certificates) $\gg$ ``\texttt{Import/Export}'' (button)
 \item Click ``\texttt{Browse..}'' (button)
-\item Select the backup file produced in section~\ref{chrome_export} or~\ref{ff_export}.
+\item Select the backup file that was produced in section~\ref{chrome_export} or~\ref{ff_export}.
 \item In the ``\texttt{Password}'' field enter the password that was chosen at the end of section~\ref{chrome_export} or~\ref{ff_export}.
 \item Click ``\texttt{OK}'' in the pop-up dialog and the next window.
 % these are actually the config steps -- probably should be in the next section!
