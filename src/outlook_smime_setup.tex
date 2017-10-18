@@ -22,15 +22,16 @@
 \usepackage{array}
 \usepackage[pdftex]{graphicx}
 \usepackage{multicol}
+\usepackage{multirow}
 \usepackage{wrapfig}
-
+\usepackage{soul}
 
 \newcommand{\yesbad}{\textcolor{red}{yes}}
 \newcommand{\nogood}{\textcolor{ForestGreen}{no}}
 \newcommand{\yesgood}{\textcolor{ForestGreen}{yes}}
 \newcommand{\nobad}{\textcolor{red}{no}}
 
-\title{\rmfamily Configuring Outlook's built-in Cryptosystem (Mac \& Windows)}
+\title{\rmfamily Configuring Outlook's built-in S/MIME Cryptosystem (Mac \& Windows)}
 %\newcommand{\theauthor}{J.G.}
 %\author{\rmfamily\theauthor}
 \date{\rmfamily\today}
@@ -40,11 +41,11 @@
 \newcommand{\secorio}{\href{https://www.secorio.com/}{\includegraphics[width=2cm]{images/logo_comodo.png}\tiny via Secorio}}
 
 \newcommand{\safaricaveat}{\tiny(Safari automatically installs S/MIME
-  keys on a ``Keychain Access''-reachable keyring.  According to
+  keys on a ``Keychain Access''-reachable keyring, which (according to
   \href{https://support.comodo.com/index.php?/Knowledgebase/Article/View/1177/37/apple-mail-and-outlook-for-os-x-smime-installation}{%
     Comodo docs} and
   \href{https://technet.microsoft.com/en-us/library/jj984223(v=office.16).aspx}{MS
-    docs}, Outlook uses Keychain Access.)}
+    docs}), Outlook uses.}
 
 \newcommand{\keystoreintl}{\tiny(browser uses its own internal key store)}
 
@@ -54,30 +55,38 @@
 
 \tableofcontents
 
-\section{Prerequisites}
+\section{Prerequisites}\label{prereq}
 \begin{itemize}
 \item MS Outlook 2013 or later is recommended.  Earlier versions
   officially support S/MIME but users often report difficulties,
   particularly with Outlook 2010.
 \item A browser is only needed initially to create SSL keys, and will
   not be used thereafter.  Any of these browsers will work:
-  \rowcolors{2}{Khaki}{LightGoldenrodYellow} %this breaks old versions of dvisvgm!
 
-  \begin{tabular}{lp{65mm}>{\small}p{0.3\textwidth}}
-    \textsl{\textbf{Browser}}        & \textsl{\textbf{Key storage consistent with Outlook (thus simpler to setup)}} & \textsl{\textbf{Notes}}\\
-    Chrome/Chromium \tiny(OS/X)      & \yesgood                & Some versions of Chrome have problems with key generation\\
-    Chrome/Chromium \tiny(Windows)   & \nobad\ \keystoreintl   &\\
-    Firefox \tiny(all platforms)     & \nobad\ \keystoreintl   &\\
-    Internet Explorer \tiny(OS/X)    & --                      & Don't use IE on Mac; it's discontinued and last version is IE4.\\
-    Internet Explorer \tiny(Windows) & \yesgood                &\\
-    Safari \tiny(OS/X)               & \yesgood\ \safaricaveat & Some versions of Safari have problems with key generation\\
-    Safari \tiny(Windows)            & ? \tiny(undocumented, left as an exercise for the readers ;]) &\\
+  % Would be nice to use \rowcolors in the following table, but text
+  % gets clobbered in the \multirow cell, and
+  % \hiderowcolors is broken entirely.
+  \begin{tabular}{lp{50mm}>{\small}p{0.37\textwidth}}
+    \textsl{\textbf{Browser}}          & \textsl{\textbf{Key storage consistent with Outlook}} & \textsl{\textbf{Notes}}\\
+    Chrome/Chromium \tiny(OS/X)        & \yesgood                & Some versions of Chrome may have problems with key generation.\\
+    \hline
+    Chrome/Chromium \tiny(Windows)     & \nobad\ \keystoreintl   & \multirow{2}{=}{Works but needs some extra steps (section~\ref{cert_install}) to copy keys.}\\
+    \cline{1-2}
+    Firefox \tiny(all platforms)       & \nobad\ \keystoreintl   & \\
+    \hline
+    \st{Internet Explorer \tiny(OS/X)} & --                      & Don't use IE on Mac; latest version (4.0) is discontinued.\\
+    \hline
+    Internet Explorer \tiny(Windows)   & \yesgood                & \\
+    \hline
+    Safari \tiny(OS/X)                 & \yesgood\ \safaricaveat & Some versions of Safari may have problems with key generation.\\
+    \hline
+    Safari \tiny(Windows)              & ? \tiny(undocumented, left as an exercise for the readers ;]) & \\
   \end{tabular}
 
-  Browsers above that are indicated not to share the same key storage
-  as Outlook (e.g. Firefox) may still be used, but there will be some
-  extra configuration steps to copy the user's keys
-  (sections~\ref{chrome_export} and~\ref{ff_export}).
+  Browsers above that are indicated ``\yesgood'' for sharing the same
+  key storage as Outlook are more convenient for this setup because
+  keys need not be copied, thus section~\ref{cert_install} may be
+  skipped.
 \end{itemize}
 
 \section{Instructional videos (optional)}
@@ -110,30 +119,33 @@ These videos are optional; not required by this guide.\\[0.5em]
 \subsection{Get an S/MIME certificate}\label{catable}
 In your browser go to one of these certificate authorities (\textbf{Justin recommends Comodo via Secorio}):\\
 
-\begin{tabular}{lp{2.3cm}l>{\tiny}l}
-  \slshape certificate authority (``CA'')
-  & \slshape price \newline\tiny(for non-commercial individual use)
-  & \slshape validity
-  & \slshape\normalsize notes\\
+\rowcolors{2}{Khaki}{LightGoldenrodYellow} %this breaks old versions of dvisvgm!
+\begin{tabular}{lp{2.3cm}l>{\tiny}p{0.36\textwidth}}
+  \slshape\textbf{certificate authority} (``CA'')
+  & \slshape\textbf{price} \newline\tiny(for non-commercial individual use)
+  & \slshape\textbf{validity}
+  & \slshape\normalsize\textbf{notes}\\
   %\hline\\
-  \href{https://www.cacert.org/}{\includegraphics[width=2cm]{images/logo_cacert4.png}} & gratis & 6|24 mos.\tiny (\href{http://wiki.cacert.org/FAQ/Privileges}{criteria}) & community driven\\
+  \href{https://www.cacert.org/}{\includegraphics[width=2cm]{images/logo_cacert4.png}} & gratis & 6|24 mos.\tiny (\href{http://wiki.cacert.org/FAQ/Privileges}{criteria}) & community driven; getting a 2yr cert requires meeting w/someone and showing state-issued proof of id\\
   \href{https://secure.comodo.com/products/frontpage?area=SecureEmailCertificate}{\includegraphics[width=2cm]{images/logo_comodo.png}\tiny direct} & gratis & 1 yr &\\
   \href{https://www.instantssl.com/ssl-certificate-products/free-email-certificate.html}{\includegraphics[width=2cm]{images/logo_comodo.png}\tiny via InstantSSL} & gratis & 1 yr &\\
-  \secorio & gratis & 1 yr & recommended; assumed choice by this guide\\
+  \secorio & gratis & 1 yr & simple; assumed choice by this guide\\
   \href{https://www.entrust.com/secure-email-certificates/}{\includegraphics[width=2cm]{images/logo_entrust.png}} & $\geq$\$20 & &\\
   \href{https://www.identrust.com/certificates/trustid.html}{\includegraphics[width=2cm]{images/logo_trustid.png}} & $\geq$\$19 & &\\
-  \href{https://www.startcomca.com/}{\includegraphics[width=2cm]{images/logo_startcom.png}} & gratis & 2 yrs & \\
-  \href{https://buy.wosign.com/free/}{wosign} & gratis? & 2 yrs? & blocks tor?\\
+  \href{https://www.startcomca.com/}{\includegraphics[width=2cm]{images/logo_startcom.png}} & gratis & 2 yrs & distrusted by Mozilla and others, thus signed msgs will likely be seen as invalid unless recipients manually add Startcom's CA key to their keystore\\
+  \href{https://buy.wosign.com/free/}{\includegraphics[width=2cm]{images/logo_wosign.png}} & \st{gratis} n/a & \st{2 yrs} n/a & recently \textbf{discontinued} but still maintained in this list because they intend to return to business\\
 \end{tabular}\\
 
-  % geotrust, symantec, thawte have discontinued service
+% geotrust, symantec, thawte have discontinued service
+% (the "\par" at the end of this ensures that the linespacing is sensible)
 {\tiny Warning: the CAs that participate in e-mail certificate
   verification are constantly changing.  Many CAs have discontinued
-  e-mail certification prior to this guide.  Those are obviously
-  omitted here, but some of the above listings are likely to become
-  obsolete as this guide ages.  Consequently it might be interesting
-  to check out the catalog of certificate authorities listed at
-  \url{http://kb.mozillazine.org/Getting_an_SMIME_certificate}).}
+  e-mail certification prior to this guide.  Those with no intent to
+  return to service are omitted here, but some of the above listings
+  are likely to become obsolete as this guide ages.  Consequently it
+  might be interesting to check out the catalog of certificate
+  authorities listed at
+  \url{http://kb.mozillazine.org/Getting_an_SMIME_certificate}).\par}
 
 \subsubsection{If you chose ``Comodo via Secorio''}
 \begin{multicols}{2}
@@ -168,10 +180,10 @@ generally involve filling out a form and confirming an e-mail.
 
 \subsection{Installing your certificate into Outlook}\label{cert_install}
 If you created your key using a browser that uses the same key storage
-as Outlook (as indicated in the ``Prerequisites''), skip this section
-and go to section~\ref{outlookcfg}.
+as Outlook (as indicated in section~\ref{prereq}, ``Prerequisites''),
+skip to section~\ref{outlookcfg}.
 
-\subsubsection{(Chrome only) Export your key from your browser}\label{chrome_export}
+\subsubsection{(Chrome only) Export your key from your browser}
 There are multiple browsers which do not share the same key storage as
 Outlook, but this section presumes you are using Chrome.  Follow
 \href{https://www.youtube.com/watch?v=n3rOEpGjrc\&start=310}{YouTube
@@ -207,7 +219,7 @@ in the video), or follow these steps:
 Then skip to section~\ref{import} for steps to import the key into
 Outlook.
 
-\subsubsection{(Firefox only) Export your key from your browser}\label{ff_export}
+\subsubsection{(Firefox only) Export your key from your browser}
 There are multiple browsers which do not share the same key storage as
 Outlook, but this section presumes you are using Firefox.  Watch
 \href{https://www.youtube.com/watch?v=wGHaB0elkaA\&start=226}{YouTube
@@ -247,11 +259,10 @@ export from a more recent version of Firefox:
 
 \subsubsection{Import your key into Outlook}\label{import}
 \begin{minipage}[t]{0.47\textwidth}
-  \centerline{\textsl{(on OS/X)}} Simply double click the
-  \texttt{.p12} backup file that was produced in
-  section~\ref{chrome_export} or~\ref{ff_export}.  OS/X will then
-  import the key into the ``Keychain Access'' tool.  According to
-  according to
+  \centerline{\textsl{(on OS/X)}} Simply double-click the
+  \texttt{.p12} backup file that was produced in the previous section.
+  OS/X will then import the key into the ``Keychain Access'' tool.
+  According to
   \href{https://technet.microsoft.com/en-us/library/jj984223(v=office.16).aspx}{MS
     docs} Outlook 2016 uses Keychain Access.
 
@@ -261,7 +272,7 @@ export from a more recent version of Firefox:
     this doc}.
 \end{minipage}\hfill%
 \begin{minipage}[t]{0.47\textwidth}
-  \centerline{\textsl{(on Windows)}} \vspace{0.5em}Follow
+  \centerline{\textsl{(on Windows)}}
   Watch
   % these are actually the config steps -- probably should be in the next section!
   % \href{https://www.youtube.com/watch?v=4fmBzeq8BVA\&start=107}{YouTube
@@ -278,10 +289,9 @@ export from a more recent version of Firefox:
     (Certificates) $\gg$ ``\texttt{Import/Export}'' (button)
   \item Click ``\texttt{Browse..}'' (button)
   \item Select the backup file that was produced in
-    section~\ref{chrome_export} or~\ref{ff_export}.
+    section~\ref{cert_install}.
   \item In the ``\texttt{Password}'' field enter the password that was
-    chosen at the end of section~\ref{chrome_export}
-    or~\ref{ff_export}.
+    chosen in final step of section~\ref{cert_install}.
   \item Click ``\texttt{OK}'' in the pop-up dialog and the next
     window.
     % these are actually the config steps -- probably should be in the next section!
@@ -306,7 +316,7 @@ export from a more recent version of Firefox:
   \end{enumerate}
 \end{minipage}\hfill%
 \begin{minipage}[t]{0.48\textwidth}
-  \centerline{\textsl{(on Windows)}} \vspace{0.5em}Follow
+  \centerline{\textsl{(on Windows)}}\vspace{0.5em}Follow
   \href{https://www.ablebits.com/office-addins-blog/2014/04/11/email-encryption-outlook/#setup-email-certificate}{this
     document}.  That link skips the top portion and takes you straight
   to ``How to set up your e-mail certificate in Outlook'' because you
