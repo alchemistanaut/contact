@@ -38,6 +38,8 @@
 
 \newcommand{\comment}[1]{} %inline comment by gobbling the argument
 
+\newcommand*{\fullref}[1]{\hyperref[{#1}]{\autoref*{#1} \nameref*{#1}}}
+
 \newcommand{\secorio}{\href{https://www.secorio.com/}{\includegraphics[width=2cm]{images/logo_comodo.png}\tiny via Secorio}}
 
 \newcommand{\safaricaveat}{\tiny(Safari automatically installs S/MIME
@@ -180,8 +182,8 @@ generally involve filling out a form and confirming an e-mail.
 
 \subsection{Installing your certificate into Outlook}\label{cert_install}
 If you created your key using a browser that uses the same key storage
-as Outlook (as indicated in section~\ref{prereq}, ``Prerequisites''),
-skip to section~\ref{outlookcfg}.
+as Outlook (as indicated \fullref{prereq}), skip to
+\fullref{outlookcfg}.
 
 \subsubsection{(Chrome only) Export your key from your browser}
 There are multiple browsers which do not share the same key storage as
@@ -288,10 +290,10 @@ export from a more recent version of Firefox:
   \item Go to Email Security (left pane) $\gg$ Digital IDs
     (Certificates) $\gg$ ``\texttt{Import/Export}'' (button)
   \item Click ``\texttt{Browse..}'' (button)
-  \item Select the backup file that was produced in
-    section~\ref{cert_install}.
+  \item Select the backup file that was produced in the previous
+    section.
   \item In the ``\texttt{Password}'' field enter the password that was
-    chosen in final step of section~\ref{cert_install}.
+    chosen in final step of the previous.
   \item Click ``\texttt{OK}'' in the pop-up dialog and the next
     window.
     % these are actually the config steps -- probably should be in the next section!
@@ -333,11 +335,11 @@ export from a more recent version of Firefox:
 In short: simply send an e-mail to the recipient using Outlook, and sign the message.\\
 
 Detailed explanation: You have a pair of keys (these were created in
-section~\ref{catable}).  One is a public key and the other is a
-private key.  The public key must be sent to those who will send you
-encrypted e-mail.  They will use your public key to encrypt messages
-to you.  Your public key is automatically contained in the signature
-of all messages you sign.
+\fullref{catable}).  One is a public key and the other is a private
+key.  The public key must be sent to those who will send you encrypted
+e-mail.  They will use your public key to encrypt messages to you.
+Your public key is automatically contained in the signature of all
+messages you sign.
 
 So to distribute your public key, simply send the other party an
 signed e-mail from Outlook.  Encrypting this key distribution message
