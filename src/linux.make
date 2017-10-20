@@ -27,7 +27,7 @@ pdfpassword = wildthing
 output_dir = build
 src_dir    = src
 work_dir   = work
-pub_dir    = ../poc_web
+pub_dir    = ../alchemistanaut.github.io
 
 #SUBDIRS = $(output_dir)
 product_basename = how_to_e-mail_justin
