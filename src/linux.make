@@ -38,6 +38,7 @@ products = $(output_dir)/$(product_basename).svg\
 	   $(output_dir)/node_webmail_addresses.png\
 	   $(output_dir)/outlook_smime_setup.pdf\
            $(output_dir)/pubkeys_aes.pdf\
+	   $(output_dir)/thumbnail.png\
 	   $(work_dir)/$(product_basename)_ugly.svg\
 	   $(work_dir)/node_email_addresses.aux\
 	   $(work_dir)/node_email_addresses.log\
@@ -56,7 +57,8 @@ products = $(output_dir)/$(product_basename).svg\
 	   $(work_dir)/pubkeys.log\
 	   $(work_dir)/pubkeys.out\
 	   $(work_dir)/pubkeys.pdf\
-	   $(work_dir)/pubkeys_files.tex
+	   $(work_dir)/pubkeys_files.tex\
+           $(work_dir)/thumbnail.gv
 
 .PHONY: all clean deploy
 #subdirs $(SUBDIRS)
@@ -111,12 +113,17 @@ $(work_dir)/%_ugly.svg: $(src_dir)/%.gv
 	       -e "/@pdfurl@/s!@pdfurl@!$(release_url)!gi"\
                -e "/@pdfpassword@/s!@pdfpassword@!$(pdfpassword)!gi" "$@"
 
+$(output_dir)/thumbnail.png: $(src_dir)/$(product_basename).gv
+	sed '/bgcolor/s/^/ratio=0.6; size=5;/' "$<" > $(work_dir)/thumbnail.gv
+	cd $(output_dir)/; dot -Tpng ../$(work_dir)/thumbnail.gv > ../"$@"
+
 # Make the SVG file pretty.  Note that svgpp introduces artifacts
-# (extra whitespace on the rendered diagram), so it's disabled until
-# that's worked out.
+# (extra whitespace on the rendered diagram surrounding <title>-tagged
+# text).  It could be a firefox defect, but in any case the sed
+# expression below kills that whitespace.
 $(output_dir)/%.svg: $(work_dir)/%_ugly.svg
-	#svgpp "$<" "$@"
-	mv "$<" "$@"
+	svgpp "$<" | sed '/[<]title[>]/{;N;N;s/\n//g;s/[<]title[>] */<title>/g;s! *[<]/title[>]!</title>!;}' > "$@"
+	#mv "$<" "$@"
 
 ####### Build rules
 
@@ -129,7 +136,7 @@ $(output_dir)/node_item_suprt_ea.png:
 #	convert -channel RGBA -background none -fill black -pointsize 16 -font Ananda-Hastakchyar label:"$(uid)"@"$(dn)" "$@"
 	convert -channel RGBA -background none -fill black -pointsize 16 -font Scriptina label:"$(uid)"@"$(dn)" "$@"
 
-all: $(output_dir)/$(product_basename).svg $(output_dir)/outlook_smime_setup.pdf
+all: $(output_dir)/$(product_basename).svg $(output_dir)/outlook_smime_setup.pdf $(output_dir)/thumbnail.png
 
 clean:
 	-rm -f $(products) */*~ *~ src/*aux src/*log src/*out src/*dvi
