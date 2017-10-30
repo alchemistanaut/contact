@@ -39,7 +39,8 @@ digraph <How to E-mail Justin> {
         pgpnote;
         smimenote;
         //confignote;
-
+        setup_outlook_note;
+        
         node [shape=diamond, style="rounded,filled", fillcolor=wheat];
 
         directsend_br;
@@ -260,6 +261,11 @@ S&#47;MIME MUAs: yes<br align="left"/>>];
 
 problem_br [label="Questions? Problems?", tooltip="Secure e-mail can be complicated, but Justin will support you."];
 problem_br -> get_support;
+
+problem_br -> setup_outlook_note [arrowhead=none, style=dotted];
+
+setup_outlook_note [URL="@pdfurl@/outlook_smime_setup.pdf",
+                    label="MS Outlook users:\nclick this node for\ndetailed instructions."]
 
 get_support [URL=<https://github.com/alchemistanaut/contact/issues>,
              fixedsize=true, width=2, height=1.4,
