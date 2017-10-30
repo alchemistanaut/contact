@@ -147,4 +147,4 @@ deploy:
 	cp $(output_dir)/*.png $(pub_dir)/images/
 	sed -e "/href.*png/s!$(release_url).\(.*[.]png\"\)!$(pub_url)/images/\1!g"\
             -e "/href.*[ps][dv][fg]/s!$(release_url).\([^\"]*\"\)!$(pub_url)/data/\1!g"\
-            $(output_dir)/*.svg > $(pub_dir)/data/$(product_basename).svg
+            $(output_dir)/$(product_basename).svg > $(pub_dir)/data/$(product_basename).svg
