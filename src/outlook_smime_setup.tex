@@ -16,15 +16,18 @@
 
 \usepackage[table,dvipsnames,svgnames]{xcolor} % for LightGoldenrodYellow (loads also »colortbl«)
 \usepackage[margin=20mm,bottom=10mm,pdftex,letterpaper]{geometry}
+\usepackage[toc,page]{appendix}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc} %suggested to avoid ``OT1 encoding''
 \usepackage{hyperref}
 \usepackage{array}
 \usepackage[pdftex]{graphicx}
+\usepackage[abs]{overpic}
 \usepackage{multicol}
 \usepackage{multirow}
 \usepackage{wrapfig}
 \usepackage{soul}
+\usepackage{calc}
 
 \newcommand{\yesbad}{\textcolor{red}{yes}}
 \newcommand{\nogood}{\textcolor{ForestGreen}{no}}
@@ -43,11 +46,12 @@
 \newcommand{\secorio}{\href{https://www.secorio.com/}{\includegraphics[width=2cm]{images/logo_comodo.png}\tiny via Secorio}}
 
 \newcommand{\safaricaveat}{\tiny(Safari automatically installs S/MIME
-  keys on a ``Keychain Access''-reachable keyring, which (according to
+  keys on a ``Keychain Access''-reachable keyring, which Outlook uses
+  according to
   \href{https://support.comodo.com/index.php?/Knowledgebase/Article/View/1177/37/apple-mail-and-outlook-for-os-x-smime-installation}{%
     Comodo docs} and
-  \href{https://technet.microsoft.com/en-us/library/jj984223(v=office.16).aspx}{MS
-    docs}), Outlook uses.}
+  \href{https://technet.microsoft.com/en-us/library/jj984223(v=office.16).aspx}{%
+    MS docs}.}
 
 \newcommand{\keystoreintl}{\tiny(browser uses its own internal key store)}
 
@@ -62,8 +66,10 @@
 \item MS Outlook 2013 or later is recommended.  Earlier versions
   officially support S/MIME but users often report difficulties,
   particularly with Outlook 2010.
-\item A browser is only needed initially to create SSL keys, and will
-  not be used thereafter.  Any of these browsers will work:
+\item A browser is only needed initially to create SSL keys, and only
+  if you are going to use a Certificate Authority (``CA'').  The
+  browser will not be used thereafter.  Any of these browsers will
+  work:
 
   % Would be nice to use \rowcolors in the following table, but text
   % gets clobbered in the \multirow cell, and
@@ -91,21 +97,21 @@
   skipped.
 \end{itemize}
 
-\section{Instructional videos (optional)}
+\section{Instructional videos (supplemental)}
 These videos are optional; not required by this guide.\\[0.5em]
 
 \rowcolors{2}{Khaki}{LightGoldenrodYellow} %this breaks old versions of dvisvgm!
-\begin{tabular}{llllp{0.4\textwidth}}
+\begin{tabular}{>{\centering}m{8mm}lllp{0.4\textwidth}}
   \slshape\textbf{Link} & \slshape\textbf{Outlook ver.} & \slshape\textbf{Browser ver.} & \slshape\textbf{CA} & \slshape\textbf{Scope + Notes}\\
-  \href{https://www.youtube.com/watch?v=6OxOo-w3Ymo}{6OxOo-w3Ymo}
+  \href{https://www.youtube.com/watch?v=6OxOo-w3Ymo}{\includegraphics[height=6mm]{images/icon_vid.png}}
   & 2007 & n/a & n/a &\\
-  \href{https://www.youtube.com/watch?v=wGHaB0elkaA}{wGHaB0elkaA}
+  \href{https://www.youtube.com/watch?v=wGHaB0elkaA}{\includegraphics[height=6mm]{images/icon_vid.png}}
   & 2010 & Firefox & Symantec & Demonstrates how to use Firefox and manually copy the key pair into Outlook.\\
-  \href{https://www.youtube.com/watch?v=n3rOEpGjrc}{n3rOEpGjrc}
+  \href{https://www.youtube.com/watch?v=n3rOEpGjrc}{\includegraphics[height=6mm]{images/icon_vid.png}}
   & 2013 & Chrome & Comodo & \\
-  \href{https://www.youtube.com/watch?v=sfancZGEGjg\&start=535}{sfancZGEGjg}
+  \href{https://www.youtube.com/watch?v=sfancZGEGjg\&start=535}{\includegraphics[height=6mm]{images/icon_vid.png}}
   & 2013-2016 & IE? & Comodo & This comprehensive video covers every step in this entire document.  It demonstrates a case where the browser automatically installs the key where Outlook can find it.  The first 9 min. of the video is blather, but the link supplied skips to the relevant part.\\
-  \href{https://www.youtube.com/watch?v=4fmBzeq8BVA}{4fmBzeq8BVA}
+  \href{https://www.youtube.com/watch?v=4fmBzeq8BVA}{\includegraphics[height=6mm]{images/icon_vid.png}}
   & 2016 & IE? & Entrust & Outlook had automatic visibility to the key in this demo on Windows, so IE was likely used.\\
 \end{tabular}
 
@@ -119,11 +125,27 @@ These videos are optional; not required by this guide.\\[0.5em]
 % detailed enough to replace this entire document.
 
 \subsection{Get an S/MIME certificate}\label{catable}
-In your browser go to one of these certificate authorities (\textbf{Justin recommends Comodo via Secorio}):\\
+You have a choice in whether you want to subscribe to a Certificate
+Authority (``CA'') or whether you want to be your own CA and generate
+your keys manually.  The advantage of using a CA is that the recipient
+has less key management effort (which doesn't matter if Justin is your
+recipient).  But CA subscriptions cost money in some situations and
+also limit the validity period of the key.
+
+\textbf{If you want to create your own key} using Windows, install
+\href{https://slproweb.com/products/Win32OpenSSL.html}{OpenSSL for
+  Windows}.  Mac users will already have openssl installed.  Then
+follow
+``\href{https://www.howtoforge.com/how-to-encrypt-mails-with-ssl-certificates-s-mime#-alternative-create-a-certificate-authority-to-sign-a-certificate}{%
+  Create a Certificate Authority to Sign A Certificate}'' to create
+your own CA and personal key pairs.
+
+\textbf{If you're opting to use a CA}, then browse to one of these
+certificate authorities (Justin recommends Comodo via Secorio):\\
 
 \rowcolors{2}{Khaki}{LightGoldenrodYellow} %this breaks old versions of dvisvgm!
-\begin{tabular}{lp{2.3cm}l>{\tiny}p{0.36\textwidth}}
-  \slshape\textbf{certificate authority} (``CA'')
+\begin{tabular}{m{38mm}p{2.3cm}l>{\tiny}p{0.36\textwidth}}
+  \slshape\textbf{CA}
   & \slshape\textbf{price} \newline\tiny(for non-commercial individual use)
   & \slshape\textbf{validity}
   & \slshape\normalsize\textbf{notes}\\
@@ -135,7 +157,7 @@ In your browser go to one of these certificate authorities (\textbf{Justin recom
   \href{https://www.entrust.com/secure-email-certificates/}{\includegraphics[width=2cm]{images/logo_entrust.png}} & $\geq$\$20 & &\\
   \href{https://www.identrust.com/certificates/trustid.html}{\includegraphics[width=2cm]{images/logo_trustid.png}} & $\geq$\$19 & &\\
   \href{https://www.startcomca.com/}{\includegraphics[width=2cm]{images/logo_startcom.png}} & gratis & 2 yrs & distrusted by Mozilla and others, thus signed msgs will likely be seen as invalid unless recipients manually add Startcom's CA key to their keystore\\
-  \href{https://buy.wosign.com/free/}{\includegraphics[width=2cm]{images/logo_wosign.png}} & \st{gratis} n/a & \st{2 yrs} n/a & recently \textbf{discontinued} but still maintained in this list because they intend to return to business\\
+  \href{https://buy.wosign.com/free/}{\begin{overpic}[width=2cm]{images/logo_wosign.png}\put(-5,10){\color{black}\rule{24mm}{1pt}}\end{overpic}} & \st{gratis} n/a & \st{2 yrs} n/a & recently \textbf{discontinued} but still maintained in this list because they intend to return to business\\
 \end{tabular}\\
 
 % geotrust, symantec, thawte have discontinued service
@@ -182,8 +204,9 @@ generally involve filling out a form and confirming an e-mail.
 
 \subsection{Installing your certificate into Outlook}\label{cert_install}
 If you created your key using a browser that uses the same key storage
-as Outlook (as indicated \fullref{prereq}), skip to
-\fullref{outlookcfg}.
+as Outlook (as indicated in \fullref{prereq}), skip to
+\fullref{outlookcfg}.  If you generated your key pair manually, skip
+to \fullref{import}.
 
 \subsubsection{(Chrome only) Export your key from your browser}
 There are multiple browsers which do not share the same key storage as
@@ -211,8 +234,8 @@ in the video), or follow these steps:
     then \texttt{Next}.
   \item You will be prompted for a password for the backup file.  A
     weak password is fine, because this backup file will not be
-    transmitted or retained for long.  You will import it into Outlook
-    locally, and then you will delete the backup file.
+    transmitted or retained.  You will import it into Outlook locally,
+    and then you will delete the backup file.
   \end{enumerate}
 \end{multicols}
 \end{minipage}
@@ -260,11 +283,15 @@ export from a more recent version of Firefox:
 \end{enumerate}
 
 \subsubsection{Import your key into Outlook}\label{import}
-\begin{minipage}[t]{0.47\textwidth}
-  \centerline{\textsl{(on OS/X)}} Simply double-click the
-  \texttt{.p12} backup file that was produced in the previous section.
-  OS/X will then import the key into the ``Keychain Access'' tool.
-  According to
+\begin{minipage}[t]{0.35\textwidth}
+  \centerline{\textsl{(on OS/X)}} If you created your own CA and
+  personal key pairs manually using openssl, then first follow
+  \href{https://www.techrepublic.com/blog/apple-in-the-enterprise/managing-ssl-certificate-authorities-on-os-x/}{%
+    this guide} to import your own CA certificate.\\[0.5em]
+
+  Simply double-click the \texttt{.p12} backup file that was produced
+  in the previous section.  OS/X will then import your personal key
+  into the ``Keychain Access'' tool.  According to
   \href{https://technet.microsoft.com/en-us/library/jj984223(v=office.16).aspx}{MS
     docs} Outlook 2016 uses Keychain Access.
 
@@ -273,8 +300,11 @@ export from a more recent version of Firefox:
   \href{https://support.microsoft.com/en-us/help/2957671/you-cannot-manage-your-certificates-in-the-mac-os-x-10-9-keychain}{%
     this doc}.
 \end{minipage}\hfill%
-\begin{minipage}[t]{0.47\textwidth}
-  \centerline{\textsl{(on Windows)}}
+\begin{minipage}[t]{0.6\textwidth}
+  \centerline{\textsl{(on Windows)}} If you created your own CA and
+  personal key pairs manually using openssl, then run \texttt{certutil
+    –addstore Root ca.crt} first to import your CA certificate.\\[0.5em]
+
   Watch
   % these are actually the config steps -- probably should be in the next section!
   % \href{https://www.youtube.com/watch?v=4fmBzeq8BVA\&start=107}{YouTube
@@ -332,7 +362,10 @@ export from a more recent version of Firefox:
 % you can skip to section~\ref{distribution}.
 
 \subsection{Distribute your S/MIME certificate (aka public key)}\label{distribution}
-In short: simply send an e-mail to the recipient using Outlook, and sign the message.\\
+In short: simply send an e-mail to the recipient using Outlook, and
+sign the message. If you created your own CA key pair instead of using
+your browser to subscribe to a CA, then you must also attach the
+\verb|ca.crt| file that you created.
 
 Detailed explanation: You have a pair of keys (these were created in
 \fullref{catable}).  One is a public key and the other is a private
@@ -346,12 +379,52 @@ signed e-mail from Outlook.  Encrypting this key distribution message
 is optional, but it must be signed.  They can then extract your public
 key from your signature.
 
+The \verb|ca.crt| also must be sent to your recipient if you created
+one, because the application used by the recipient is unlikely to
+accept certificates without a chain of trust.
+
 \section{Prep to send encrypted mail% or verify signatures on received mail
 }
 Before you can send someone an encrypted message, you need the
 recipients S/MIME certificate (public key).  This will normally come
 to you when they send you a signed message, at which point you can
 extract the certificate.  The certificate must then be associated to
-that person in your address book.
+that person in your address book.  Your Outlook Address Book has a
+\emph{certificates} tab for each record, where you can verify and
+control the association between that person and their certificate.
 
+\begin{appendices}%\appendix
+  \begin{minipage}{\textwidth}% This minipage inhibits page splitting
+    \section{S/MIME alternative: PGP}
+    Outlook does not natively support PGP, so extra installations are
+    required.  For OS/X and Windows there is a proprietary product from
+    \href{https://www.symantec.com/products/desktop-email-encryption}{Symantec}.
+    There is also a free software option for Windows users, where the
+    typical PGP implementation is
+    \href{https://www.gpg4win.org/version3.html}{GPG4Win}, which includes
+    the MS Outlook plugin ``GPGOL''.  Historically Outlook has not worked
+    well with PGP, but ``GPGOL'' has been overhauled in GPG4Win 3.0.  This
+    \href{https://www.youtube.com/watch?v=-TOUeTFUfgQ}{video} shows GPGOL
+    in action (but note that that video shows the old version).
+
+    This is a comparison between PGP and S/MIME on Outlook:\\[1em]
+
+    \newcolumntype{D}{|p{0.4\textwidth+2\tabcolsep}|}
+    \newcolumntype{S}{|p{0.4\textwidth+2\tabcolsep}}
+    % \newcolumntype{D}{\linewidth-2\tabcolsep}
+    % \newcolumntype{D}{\columnwidth }
+
+    % \tabulinesep=2mm
+    \rowcolors{2}{Khaki}{LightGoldenrodYellow} %this breaks old versions of dvisvgm!
+    \begin{tabular}{p{0.2\textwidth}|p{0.2\textwidth}|p{0.2\textwidth}|p{0.2\textwidth}}
+      & PGP & S/MIME \newline\small(without CA) & S/MIME \newline\small(with CA)\\
+      typical application & p2p & internal & b2b\\
+      ease of Outlook installation & 3rd-party app (GPG) and plugin needed & 3rd-party app needed (openssl), and extra setup effort for recipients & Supported natively.\\
+      key cost & \multicolumn{2}{D}{Keys are gratis for everyone (individuals and corporations)} & Keys are gratis only for individuals and only from some CAs.\\
+      key lifetime & \multicolumn{2}{D}{Keys expire at any arbitrary date of your choosing, or never.} & Keys expire in 6-24 months (approx).\\
+      flexibility & complete flexibility: 0, 1 or many addresses can be on one key, and many keys can have the same address & \multicolumn{2}{S}{one address per key (and also one key per address if the recipient uses iOS)}\\
+      typical key distribution & publish your public key on a gratis public keyring or attach it to an e-mail & \multicolumn{2}{S}{public keyrings virtually non-existent; recipient cannot send you an encrypted message until you send them a signed email}\\
+    \end{tabular}
+  \end{minipage}
+\end{appendices}
 \end{document}
