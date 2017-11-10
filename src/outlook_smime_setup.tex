@@ -409,21 +409,31 @@ control the association between that person and their certificate.
 
     This is a comparison between PGP and S/MIME on Outlook:\\[1em]
 
+    % good guide on lengths: https://en.wikibooks.org/wiki/LaTeX/Lengths
     \newcolumntype{D}{|p{0.4\textwidth+2\tabcolsep}|}
     \newcolumntype{S}{|p{0.4\textwidth+2\tabcolsep}}
-    % \newcolumntype{D}{\linewidth-2\tabcolsep}
-    % \newcolumntype{D}{\columnwidth }
+    % \newcolumntype{D}{\linewidth-2\tabcolsep} <= this would be ideal, but incompatible with array
 
-    % \tabulinesep=2mm
     \rowcolors{2}{Khaki}{LightGoldenrodYellow} %this breaks old versions of dvisvgm!
     \begin{tabular}{p{0.2\textwidth}|p{0.2\textwidth}|p{0.2\textwidth}|p{0.2\textwidth}}
       & PGP & S/MIME \newline\small(without CA) & S/MIME \newline\small(with CA)\\
       typical application & p2p & internal & b2b\\
-      ease of Outlook installation & 3rd-party app (GPG) and plugin needed & 3rd-party app needed (openssl), and extra setup effort for recipients & Supported natively.\\
-      key cost & \multicolumn{2}{D}{Keys are gratis for everyone (individuals and corporations)} & Keys are gratis only for individuals and only from some CAs.\\
-      key lifetime & \multicolumn{2}{D}{Keys expire at any arbitrary date of your choosing, or never.} & Keys expire in 6-24 months (approx).\\
-      flexibility & complete flexibility: 0, 1 or many addresses can be on one key, and many keys can have the same address & \multicolumn{2}{S}{one address per key (and also one key per address if the recipient uses iOS)}\\
-      typical key distribution & publish your public key on a gratis public keyring or attach it to an e-mail & \multicolumn{2}{S}{public keyrings virtually non-existent; recipient cannot send you an encrypted message until you send them a signed email}\\
+      ease of Outlook installation
+      & 3rd-party app (GPG) and plugin needed
+            & 3rd-party app needed (openssl), and extra setup effort for recipients
+                                                & Supported natively.\\
+      key cost
+      & \multicolumn{2}{D}{Keys are gratis for everyone (individuals and corporations)}
+            & Keys are gratis only for individuals and only from some CAs.\\
+      key lifetime
+      & \multicolumn{2}{D}{Keys expire at any arbitrary date of your choosing, or never.}
+            & Keys expire in 6-24 months (approx).\\
+      flexibility
+      & complete flexibility: 0, 1 or many addresses can be on one key, and many keys can have the same address
+            & \multicolumn{2}{S}{one address per key (and also one key per address if the recipient uses iOS)}\\
+      typical key distribution
+      & publish your public key on a gratis public keyring or attach it to an e-mail
+            & \multicolumn{2}{S}{public keyrings virtually non-existent; recipient cannot send you an encrypted message until you send them a signed email}\\
     \end{tabular}
   \end{minipage}
 \end{appendices}

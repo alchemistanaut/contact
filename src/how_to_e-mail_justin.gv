@@ -56,7 +56,7 @@ digraph <How to E-mail Justin> {
         node [shape=box, fillcolor="lavenderblush"];
 
         start [shape=Mdiamond,
-               label=<Do you need to e-mail Justin?<br/>(However unfortunate,<br/>you're in the right place)>,
+               label=<Do you need to e-mail Justin?>,
                tooltip="Keep calm, carry on.."];
 
         start -> directsend_br [label="Yes"];
