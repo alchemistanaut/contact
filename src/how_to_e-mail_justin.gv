@@ -40,6 +40,7 @@ digraph <How to E-mail Justin> {
         smimenote;
         //confignote;
         setup_outlook_note;
+        setup_mailapp_note;
         
         node [shape=diamond, style="rounded,filled", fillcolor=wheat];
 
@@ -262,8 +263,11 @@ S&#47;MIME MUAs: yes<br align="left"/>>];
 problem_br [label="Questions? Problems?", tooltip="Secure e-mail can be complicated, but Justin will support you."];
 problem_br -> get_support;
 
+problem_br -> setup_mailapp_note [arrowhead=none, style=dotted];
 problem_br -> setup_outlook_note [arrowhead=none, style=dotted];
 
+setup_mailapp_note [URL="@pdfurl@/mailapp_smime_setup.pdf",
+                    label="iOS users:\nclick this node for\ndetailed instructions."]
 setup_outlook_note [URL="@pdfurl@/outlook_smime_setup.pdf",
                     label="MS Outlook users:\nclick this node for\ndetailed instructions."]
 

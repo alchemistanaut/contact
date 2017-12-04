@@ -43,8 +43,6 @@
 
 \newcommand*{\fullref}[1]{\hyperref[{#1}]{\autoref*{#1} \nameref*{#1}}}
 
-\newcommand{\secorio}{\href{https://www.secorio.com/}{\includegraphics[width=2cm]{images/logo_comodo.png}\tiny via Secorio}}
-
 \newcommand{\safaricaveat}{\tiny(Safari automatically installs S/MIME
   keys on a ``Keychain Access''-reachable keyring, which Outlook uses
   according to
@@ -63,7 +61,7 @@
 
 \section{Prerequisites}\label{prereq}
 \begin{itemize}
-\item MS Outlook 2013 or later is recommended.  Earlier versions
+\item MS Outlook 2013 or later is recommended.  Earlier versions also
   officially support S/MIME but users often report difficulties,
   particularly with Outlook 2010.
 \item A browser is only needed initially to create SSL keys, and only
@@ -124,83 +122,7 @@ These videos are optional; not required by this guide.\\[0.5em]
 %     link}} skips straight to the relevant part.  That video is
 % detailed enough to replace this entire document.
 
-\subsection{Get an S/MIME certificate}\label{catable}
-You have a choice in whether you want to subscribe to a Certificate
-Authority (``CA'') or whether you want to be your own CA and generate
-your keys manually.  The advantage of using a CA is that the recipient
-has less key management effort (which doesn't matter if Justin is your
-recipient).  But CA subscriptions cost money in some situations and
-also limit the validity period of the key.
-
-\textbf{If you want to create your own key} using Windows, install
-\href{https://slproweb.com/products/Win32OpenSSL.html}{OpenSSL for
-  Windows}.  Mac users will already have openssl installed.  Then
-follow
-``\href{https://www.howtoforge.com/how-to-encrypt-mails-with-ssl-certificates-s-mime#-alternative-create-a-certificate-authority-to-sign-a-certificate}{%
-  Create a Certificate Authority to Sign A Certificate}'' to create
-your own CA and personal key pairs.
-
-\textbf{If you're opting to use a CA}, then browse to one of these
-certificate authorities (Justin recommends Comodo via Secorio):\\
-
-\rowcolors{2}{Khaki}{LightGoldenrodYellow} %this breaks old versions of dvisvgm!
-\begin{tabular}{m{38mm}p{2.3cm}l>{\tiny}p{0.36\textwidth}}
-  \slshape\textbf{CA}
-  & \slshape\textbf{price} \newline\tiny(for non-commercial individual use)
-  & \slshape\textbf{validity}
-  & \slshape\normalsize\textbf{notes}\\
-  %\hline\\
-  \href{https://www.cacert.org/}{\includegraphics[width=2cm]{images/logo_cacert4.png}} & gratis & 6|24 mos.\tiny (\href{http://wiki.cacert.org/FAQ/Privileges}{criteria}) & community driven; getting a 2yr cert requires meeting w/someone and showing state-issued proof of id\\
-  \href{https://secure.comodo.com/products/frontpage?area=SecureEmailCertificate}{\includegraphics[width=2cm]{images/logo_comodo.png}\tiny direct} & gratis & 1 yr &\\
-  \href{https://www.instantssl.com/ssl-certificate-products/free-email-certificate.html}{\includegraphics[width=2cm]{images/logo_comodo.png}\tiny via InstantSSL} & gratis & 1 yr &\\
-  \secorio & gratis & 1 yr & simple; assumed choice by this guide\\
-  \href{https://www.entrust.com/secure-email-certificates/}{\includegraphics[width=2cm]{images/logo_entrust.png}} & $\geq$\$20 & &\\
-  \href{https://www.identrust.com/certificates/trustid.html}{\includegraphics[width=2cm]{images/logo_trustid.png}} & $\geq$\$19 & &\\
-  \href{https://www.startcomca.com/}{\includegraphics[width=2cm]{images/logo_startcom.png}} & gratis & 2 yrs & distrusted by Mozilla and others, thus signed msgs will likely be seen as invalid unless recipients manually add Startcom's CA key to their keystore\\
-  \href{https://buy.wosign.com/free/}{\begin{overpic}[width=2cm]{images/logo_wosign.png}\put(-5,10){\color{black}\rule{24mm}{1pt}}\end{overpic}} & \st{gratis} n/a & \st{2 yrs} n/a & recently \textbf{discontinued} but still maintained in this list because they intend to return to business\\
-\end{tabular}\\
-
-% geotrust, symantec, thawte have discontinued service
-% (the "\par" at the end of this ensures that the linespacing is sensible)
-{\tiny Warning: the CAs that participate in e-mail certificate
-  verification are constantly changing.  Many CAs have discontinued
-  e-mail certification prior to this guide.  Those with no intent to
-  return to service are omitted here, but some of the above listings
-  are likely to become obsolete as this guide ages.  Consequently it
-  might be interesting to check out the catalog of certificate
-  authorities listed at
-  \url{http://kb.mozillazine.org/Getting_an_SMIME_certificate}).\par}
-
-\subsubsection{If you chose ``Comodo via Secorio''}
-\begin{multicols}{2}
-  \begin{enumerate}
-  \item (secorio.com) If you are using the \emph{noscript} firefox
-    plugin, you must enable javascript for \texttt{secorio.com} and
-    \texttt{comodo.com}.
-  \item (secorio.com) In the left frame, select ``\texttt{S/MIME Class
-      2}'' (even though it's \emph{class 1} that we need), then click
-    ``\texttt{Order}''.
-  \item (secorio.com) Scroll down to ``\texttt{S/MIME Certificates}''
-    and choose ``1 year'' in the pull-down to the right of the
-    \emph{class 1} row.
-  \item (comodo.com) Fill out the form that appears in a new tab.
-    Setting a revocation password is optional (and it's a good
-    idea).% Untick the
-    % ``Comodo newsletter opt in'' crap (if it's there).
-  \item (your inbox) An e-mail will arrive.  If your e-mail client
-    renders it graphically, click the button ``\texttt{Click \&
-      Install Comodo Email Certificate}''.  For text clients, follow
-    the instructions in the e-mail.  If your mail client does not
-    automatically use Firefox or IE to open URLs, right-click that
-    button instead, copy the URL, and paste it in the address bar to
-    force it to render in Firefox or IE.
-  \item Skip to section~\ref{cert_install}
-  \end{enumerate}
-\end{multicols}
-
-\subsubsection{If you chose another certificate authority}
-Simply follow the instructions on the website of the CA.  It will
-generally involve filling out a form and confirming an e-mail.
+\input{src/get_smime_cert.tex}
 
 \subsection{Installing your certificate into Outlook}\label{cert_install}
 If you created your key using a browser that uses the same key storage
@@ -213,32 +135,15 @@ There are multiple browsers which do not share the same key storage as
 Outlook, but this section presumes you are using Chrome.  Follow
 \href{https://www.youtube.com/watch?v=n3rOEpGjrc\&start=310}{YouTube
   video n3rOEpGjrc} (the link of which jumps you to the relevant point
-in the video), or follow these steps:
+in the video), or follow these steps:\\[1em]
 
-\begin{minipage}{\textwidth}% This minipage inhibits page splitting
-\begin{multicols}{2}
-  \begin{enumerate}
-  \item After creating the certificate (previous section) Chrome
-    presents a status bar under the address bar saying ``Successfully
-    stored client certificate..''.  Click the ``\texttt{View}'' button
-    on that bar.
-  \item There is a pop-up which showing basic information about your
-    certificate.  Switch to the \texttt{Details} tab.
-  \item Click the ``\texttt{Copy to File}'' button to launch an export
-    wizard.
-  \item Click \texttt{Next}.
-  \item You are asked if you want to export the private key with the
-    certificate.  The default answer is no, but you need to click
-    ``\textbf{\texttt{yes}}'', then \texttt{Next}.
-  \item You are asked which format to use.  Choose \texttt{PKCS\#12},
-    then \texttt{Next}.
-  \item You will be prompted for a password for the backup file.  A
-    weak password is fine, because this backup file will not be
-    transmitted or retained.  You will import it into Outlook locally,
-    and then you will delete the backup file.
-  \end{enumerate}
-\end{multicols}
-\end{minipage}
+\newcommand{\pwadvice}{%
+  You will be prompted for a password for the backup file.  A weak
+  password is fine, because this backup file will not be transmitted
+  or retained.  You will import it into Outlook locally, and then you
+  will delete the backup file.}
+
+\input{src/key_export_chrome.tex}
 
 \vspace{1em}
 Then skip to section~\ref{import} for steps to import the key into
@@ -262,25 +167,7 @@ link skips that portion of the video automatically.
 If not following the above-mentioned video, these are the steps to
 export from a more recent version of Firefox:
 
-\begin{enumerate}
-  \item Go to: menu ($\equiv$) $\gg$ Options/Preferences $\gg$ Advanced
-  $\gg$ Certificates $\gg$ View Certificates $\gg$ Your Certificates.\\[1em]%
-  \includegraphics[width=0.7\textwidth]{images/firefox_cert_settings.png}
-\item Highlight the line showing your new key.  It will be under the
-  name of the CA you chose (e.g. the line under ``COMODO CA Limited''
-  if you chose Comodo).
-\item %\raisebox{0.6\baselineskip}{\parbox[t]{0.9\textwidth}{%
-      %\begin{wrapfigure}{r}{0.7\textwidth}%
-      %  \includegraphics[width=0.7\textwidth]{mailapp_firefox_cert_settings.png}
-      %\end{wrapfigure}
-  Click ``\texttt{Backup...}'' to export the key.
-\item Save the file somewhere with a filename of your choice.  It will
-  likely be given a \verb|.p12| extension.
-\item\label{makebupw} You will be prompted for a password for the
-  backup file.  A weak password is fine, because this backup file will
-  not be transmitted or retained for long.  You will import it into
-  Outlook locally, and then you will delete the backup file.
-\end{enumerate}
+\input{src/key_export_firefox.tex}
 
 \subsubsection{Import your key into Outlook}\label{import}
 \begin{minipage}[t]{0.35\textwidth}
@@ -394,7 +281,7 @@ that person in your address book.  Your Outlook Address Book has a
 control the association between that person and their certificate.
 
 \begin{appendices}%\appendix
-  \begin{minipage}{\textwidth}% This minipage inhibits page splitting
+  \begin{minipage}{\textwidth} %This minipage inhibits page splitting
     \section{S/MIME alternative: PGP}
     Outlook does not natively support PGP, so extra installations are
     required.  For OS/X and Windows there is a proprietary product from
@@ -420,7 +307,7 @@ control the association between that person and their certificate.
       typical application & p2p & internal & b2b\\
       ease of Outlook installation
       & 3rd-party app (GPG) and plugin needed
-            & 3rd-party app needed (openssl), and extra setup effort for recipients
+            & 3rd-party app needed (openssl), and extra setup effort for you and your correspondent
                                                 & Supported natively.\\
       key cost
       & \multicolumn{2}{D}{Keys are gratis for everyone (individuals and corporations)}

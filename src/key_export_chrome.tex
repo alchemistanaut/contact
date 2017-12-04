@@ -1,0 +1,21 @@
+\begin{minipage}{\textwidth}% This minipage inhibits page splitting
+\begin{multicols}{2}
+  \begin{enumerate}
+  \item After creating the certificate (previous section) Chrome
+    presents a status bar under the address bar saying ``Successfully
+    stored client certificate..''.  Click the ``\texttt{View}'' button
+    on that bar.
+  \item There is a pop-up which showing basic information about your
+    certificate.  Switch to the \texttt{Details} tab.
+  \item Click the ``\texttt{Copy to File}'' button to launch an export
+    wizard.
+  \item Click \texttt{Next}.
+  \item You are asked if you want to export the private key with the
+    certificate.  The default answer is no, but you need to click
+    ``\textbf{\texttt{yes}}'', then \texttt{Next}.
+  \item You are asked which format to use.  Choose \texttt{PKCS\#12},
+    then \texttt{Next}.
+  \item \pwadvice
+  \end{enumerate}
+\end{multicols}
+\end{minipage}

@@ -37,6 +37,7 @@ products = $(output_dir)/$(product_basename).svg\
 	   $(output_dir)/node_muas.png\
 	   $(output_dir)/node_webmail_addresses.png\
 	   $(output_dir)/outlook_smime_setup.pdf\
+	   $(output_dir)/mailapp_smime_setup.pdf\
            $(output_dir)/pubkeys_aes.pdf\
 	   $(output_dir)/thumbnail.png\
 	   $(work_dir)/$(product_basename)_ugly.svg\
@@ -53,6 +54,10 @@ products = $(output_dir)/$(product_basename).svg\
 	   $(work_dir)/outlook_smime_setup.log\
 	   $(work_dir)/outlook_smime_setup.out\
 	   $(work_dir)/outlook_smime_setup.toc\
+	   $(work_dir)/mailapp_smime_setup.aux\
+	   $(work_dir)/mailapp_smime_setup.log\
+	   $(work_dir)/mailapp_smime_setup.out\
+	   $(work_dir)/mailapp_smime_setup.toc\
 	   $(work_dir)/pubkeys.aux\
 	   $(work_dir)/pubkeys.log\
 	   $(work_dir)/pubkeys.out\
@@ -81,7 +86,8 @@ $(work_dir)/%.pdf: $(src_dir)/%.tex
 	pdflatex -output-directory $(work_dir)/ "$<"
 
 $(output_dir)/%.pdf: $(work_dir)/%.pdf
-	mv "$<" "$@"
+	qpdf --linearize "$<" "$@"
+	rm "$<"
 
 $(work_dir)/%.dvi: $(src_dir)/%.tex
 	latex -output-directory $(work_dir)/ "$<"
@@ -136,7 +142,7 @@ $(output_dir)/node_item_suprt_ea.png:
 #	convert -channel RGBA -background none -fill black -pointsize 16 -font Ananda-Hastakchyar label:"$(uid)"@"$(dn)" "$@"
 	convert -channel RGBA -background none -fill black -pointsize 16 -font Scriptina label:"$(uid)"@"$(dn)" "$@"
 
-all: $(output_dir)/$(product_basename).svg $(output_dir)/outlook_smime_setup.pdf $(output_dir)/thumbnail.png
+all: $(output_dir)/$(product_basename).svg $(output_dir)/outlook_smime_setup.pdf $(output_dir)/mailapp_smime_setup.pdf $(output_dir)/thumbnail.png
 
 clean:
 	-rm -f $(products) */*~ *~ src/*aux src/*log src/*out src/*dvi

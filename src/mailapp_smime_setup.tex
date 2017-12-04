@@ -1,0 +1,241 @@
+\documentclass[pdftex,12pt,titlepage=false]{scrartcl}
+
+\usepackage[table,dvipsnames,svgnames]{xcolor} % for LightGoldenrodYellow (loads also »colortbl«)
+\usepackage[margin=20mm,bottom=10mm,pdftex,letterpaper]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc} %suggested to avoid ``OT1 encoding''
+\usepackage{hyperref}
+\usepackage{array}
+\usepackage[pdftex]{graphicx}
+\usepackage[abs]{overpic}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{soul} %needed for \st
+\usepackage{tikz}
+
+\title{\rmfamily Configuring iOS's built-in S/MIME Cryptosystem}
+%\newcommand{\theauthor}{J.G.}
+%\author{\rmfamily\theauthor}
+\date{\rmfamily\today}
+
+\newcommand{\yesbad}{\textcolor{red}{yes}}
+\newcommand{\nogood}{\textcolor{ForestGreen}{no}}
+\newcommand{\yesgood}{\textcolor{ForestGreen}{yes}}
+\newcommand{\nobad}{\textcolor{red}{no}}
+
+\newcommand{\comment}[1]{} %inline comment by gobbling the argument
+
+\newcommand*{\fullref}[1]{\hyperref[{#1}]{\autoref*{#1} \nameref*{#1}}}
+
+\newcommand{\keystoreintl}{\tiny(browser uses its own internal key store)}
+
+\newcommand{\shrug}[1][]{%
+  \begin{tikzpicture}[baseline,x=0.8\ht\strutbox,y=0.8\ht\strutbox,line width=0.125ex,#1]
+    \def\arm{(-2.5,0.95) to (-2,0.95) (-1.9,1) to (-1.5,0) (-1.35,0) to (-0.8,0)};
+    \draw \arm;
+    \draw[xscale=-1] \arm;
+    \def\headpart{(0.6,0) arc[start angle=-40, end angle=40,x radius=0.6,y radius=0.8]};
+    \draw \headpart;
+    \draw[xscale=-1] \headpart;
+    \def\eye{(-0.075,0.15) .. controls (0.02,0) .. (0.075,-0.15)};
+    \draw[shift={(-0.3,0.8)}] \eye;
+    \draw[shift={(0,0.85)}] \eye;
+    % draw mouth
+    \draw (-0.1,0.2) to [out=15,in=-100] (0.4,0.95); 
+  \end{tikzpicture}}
+
+\def\shrugfuzzy{\texttt{\raisebox{0.75em}{\char`\_}\char`\\\char`\_\kern-0.5ex(\kern-0.25ex\raisebox{0.25ex}{\rotatebox{45}{\raisebox{-.75ex}"\kern-1.5ex\rotatebox{-90})}}\kern-0.5ex)\kern-0.5ex\char`\_/\raisebox{0.75em}{\char`\_}}}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section{Prerequisites}
+\begin{itemize}
+\item iOS device (e.g. iPhone or iPad).
+\item A desktop browser is only needed initially to create SSL keys,
+  and only if you are going to use a Certificate Authority (``CA'').
+  The browser will not be used thereafter.  Any of these browsers will
+  work:
+  
+    \begin{tabular}{lp{50mm}>{\small}p{0.37\textwidth}}
+    \textsl{\textbf{Browser}}          & \textsl{\textbf{Key storage consistent with Apple Mail on OS/X}} & \textsl{\textbf{Notes}}\\
+    Chrome/Chromium \tiny(OS/X)        & \yesgood                & Some versions of Chrome may have problems with key generation.\\
+    \hline
+    Chrome/Chromium \tiny(Windows)     & not applicable          & \\
+    \hline
+    Firefox \tiny(all platforms)       & \nobad\ \keystoreintl   & \\
+    \hline
+    \st{Internet Explorer \tiny(OS/X)} & --                      & Don't use IE on Mac; latest version (4.0) is discontinued.\\
+    \hline
+    Internet Explorer \tiny(Windows)   & not applicable          & \\
+    \hline
+    Safari \tiny(OS/X)                 & \yesgood                & Some versions of Safari may have problems with key generation.\\
+    \hline
+    Safari \tiny(Windows)              & not applicable          & \\
+  \end{tabular}
+
+  If you have a Mac and intend Apple Mail to also handle encrypted
+  messages, browsers above that are indicated ``\yesgood'' for sharing
+  the same key storage as Apple Mail are more convenient.  If you only
+  need to setup an iOS device then it doesn't matter what browser you
+  use.
+
+\end{itemize}
+
+\section{Prep to receive encrypted mail or to send signed mail}
+
+  %\item \href{https://www.startcomca.com/}{startcomca.com}
+  %\item Click for a gratis class 1 e-mail validation S/MIME certificate: cr01.png
+  %\item Click \verb|Sign-up|: cr02.png
+  %\item Fill out the form and click \verb|send|.  The e-mail address
+  %  should match the e-mail address that you want associated to the
+  %  encryption certificate.
+  %\item Retrieve the verification code that was sent to your e-mail
+  %  account.
+  %%\item Point Chrome to: \url{https://secure.comodo.com/products/frontpage?area=SecureEmailCertificate}
+  %\item
+
+\input{src/get_smime_cert.tex}
+
+\subsection{Transferring your certificate from the browser to Mail.app}\label{cert_install}
+If you generated your key pair manually, skip to \fullref{import}.
+Otherwise, follow the steps below to first export your key from your
+browser.
+\subsubsection{(Chrome only) Export your key from your browser}
+Follow \href{https://www.youtube.com/watch?v=n3rOEpGjrc\&start=310}{%
+  YouTube video n3rOEpGjrc} (the link of which jumps you to the
+relevant point in the video), or follow these steps:
+
+\newcommand{\pwadvice}{%
+  You will be prompted for a password for the backup file.  A strong
+  password is important because the next step will expose the file to
+  entities who could attack it.  Since this password is temporary
+  (will only need to be typed on one occasion), a strong password will
+  not be a burden.}
+  
+\input{src/key_export_chrome.tex}
+
+\subsubsection{(Firefox only) Export your key from your browser}
+
+\input{src/key_export_firefox.tex}
+
+\subsubsection{Export your key from browsers other than Chrome or Firefox}
+\shrug\ Try to mirror the approaches above in your browser.
+
+\subsubsection{Importing your key}\label{import}
+
+\begin{enumerate}%\setcounter{enumi}{6}
+\item Find the \texttt{.p12} file you either created manually or
+  exported from a browser in previous steps.  E-mail it to yourself.
+\end{enumerate}
+
+Either follow the illustrated steps under ``Importing your certificate
+into iPhone/iPad'' in
+\url{https://www.comodo.com/pdf/Comodo-CPAC-iPhone-iPad.pdf},
+% alternatively, and more comprehensive => http://ccit.mines.edu/UserFiles/File/ccit/security/importing_and_using_smime_certificate-web.pdf
+\textbf{OR} continue with the following steps:\\
+\begin{minipage}{\textwidth}% This minipage inhibits page splitting
+  \begin{multicols}{2}
+    \begin{enumerate}\setcounter{enumi}{1}
+    \item (on your iOS device, in mail.app) open the above-composed e-mail.
+      Do this on all your iOS devices.
+    \item Open the file attachment by tapping it.
+    \item Tap ``\verb|install|'' at the top right.
+    \item Ignore the unsigned profile warning, and tap ``\verb|install|''
+      two more times (or as needed).
+    \item At the password prompt, enter the \emph{backup} password created
+      in step \ref{makebupw}.
+    \item Tap ``\verb|Next|'' at the top right.
+    \item Tap ``\verb|Done|'' at the top right.
+    \item (optional) The key backup file and e-mail carrying it
+      may be deleted and the password may be forgotten at this point.
+      There is no further use for them.  The backup file can always be
+      re-created from Firefox if the key must be imported to other
+      iOS devices later.
+      % http://www.macwhiz.com/blog/2014/11/18/apple-s-mime/
+    \end{enumerate}
+  \end{multicols}
+\end{minipage}\\[1em]
+
+The new certificate will expire (see ``validity'' in section~\ref{catable}).
+
+\subsection{Enabling S/MIME functionality in mail.app}\label{smime_enable}
+Either follow the illustrated steps under ``Enable S/MIME for your
+mail account'' and ``Enable signing and encryption'' in
+\url{https://www.comodo.com/pdf/Comodo-CPAC-iPhone-iPad.pdf}, or
+continue with the following steps:\\[-2em]%
+\begin{wrapfigure}{r}{0.2\textwidth}%
+  \includegraphics[width=0.2\textwidth]{images/mailapp_smime_settings_indicated.png}
+\end{wrapfigure}%
+\begin{enumerate}%\setcounter{enumi}{14}
+\item (iOS device) go to: Settings $\gg$ Mail, Contacts, Calendars
+  $\gg$ Accounts: (e-mail service provider for the address you created
+  a key for) $\gg$ IMAP: Account... $\gg$ Advanced $\gg$ S/MIME.
+\item enable it
+\item go to: ``\verb|Sign|'' and enable it.  There will be an address under
+  ``Certificates'' if the certificate installation worked earlier.
+\item repeat the above step for ``\verb|Encrypt|''
+\item go back: \textbf{Account} $\ll$ Advanced
+\item tap ``\verb|Done|'' in the top right corner.
+\end{enumerate}
+
+\subsection{Distribute your S/MIME certificate (aka public key)}
+In short: simply send an e-mail to the recipient using mail.app.  If
+you created your own CA key pair instead of using your browser to
+subscribe to a CA, then you must also send the \verb|ca.crt| file
+that you created.\\
+
+Detailed explanation: You have a pair of keys (these were created in
+section~\ref{catable}).  One is a public key and the other is a
+private key.  The public key must be sent to those who will send you
+encrypted e-mail.  They will use your public key to encrypt messages
+to you.  Your public key is automatically contained in the signature
+of all messages you send using mail.app (because you enabled S/MIME
+signing in section~\ref{smime_enable}).
+
+So to distribute your public key, simply send the other party an
+e-mail from mail.app, which need not be encrypted.  They can then
+extract your public key from your signature (which is composed as an
+attached file named ``\verb|smime.p7s|'').
+
+\section{Prep to send encrypted mail% or verify signatures on received mail
+}
+Before you can send someone an encrypted message, you need their
+S/MIME certificate (public key).  Follow section~\ref{smime_enable} if
+you haven't already done so, but instead of configuring the e-mail
+service provider for your own key, choose the e-mail service provider
+you will send the encrypted messages from (if different).  Then follow
+the next section (\ref{import_cert}):
+
+\subsection{Importing the S/MIME certificate of another
+  party}\label{import_cert}
+\begin{enumerate}
+\item Ask the other party to send you a signed message.
+\item \raisebox{0.6\baselineskip}{\parbox[t]{0.9\textwidth}{%
+      \begin{wrapfigure}{r}{0.2\textwidth}\includegraphics[width=0.2\textwidth]{images/mailapp_smime_signed_checkmark.png}\end{wrapfigure}
+      Open the signed message in mail.app.  Successfully signed
+      messages have a blue ten-point star with a check in the center,
+      which appears to the right of the senders
+      address.}}
+\item Tap the \emph{From} address.
+\item Tap ``\verb|View Certificate|''.
+\item Tap the ``\verb|Install|'' button.
+\item Tap ``\verb|Done|'' on the top right corner.
+\end{enumerate}
+
+Now you can send encrypted messages to the sender.
+
+\end{document}
+
+% Extra notes for protonmail users:
+% 
+% 1) click on "SETTINGS" at the top.
+% 2) click on "Keys" in the left frame
+% 3) click on "Public Key" under the "Download" column
+% 4) choose "save file", and save it to a place where you will remember (for the next step)
+% 5) compose an e-mail to me, and attach that file you just saved
+
