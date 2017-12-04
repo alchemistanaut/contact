@@ -15,7 +15,7 @@
 # Parse the URL from the readme file.
 #pub_url=$(shell sed -ne '/http.*how_to_e-mail_justin.svg/s!.*\(http.*\)/data/how_to_e-mail_justin.svg.*!\1!p' README.md)
 pub_url=https://alchemistanaut.github.io
-release_url=https://github.com/alchemistanaut/contact/releases/tag/v2017.2.0
+release_url=https://github.com/alchemistanaut/contact/releases/tag/v2017.3.0
 
 # support address components
 uid = support
