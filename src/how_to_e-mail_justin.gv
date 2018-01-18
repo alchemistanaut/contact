@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-digraph <How to E-mail Justin> {
+digraph <How to contact Justin> {
         //label="How to e-mail Justin";
         //labelloc=t;
         bgcolor=lemonchiffon1;
@@ -41,7 +41,7 @@ digraph <How to E-mail Justin> {
         //confignote;
         setup_outlook_note;
         setup_mailapp_note;
-        
+
         node [shape=diamond, style="rounded,filled", fillcolor=wheat];
 
         directsend_br;
@@ -57,10 +57,19 @@ digraph <How to E-mail Justin> {
         node [shape=box, fillcolor="lavenderblush"];
 
         start [shape=Mdiamond,
-               label=<Do you need to e-mail Justin?>,
+               label=<How would you like to make contact?>,
                tooltip="Keep calm, carry on.."];
 
-        start -> directsend_br [label="Yes"];
+        start -> voice         [label="Voice"];
+        start -> vmfax         [label="Voicemail/Fax"];
+        start -> directsend_br [label="E-mail"];
+
+        voice [URL=<https://ring.cx/>,
+               label="Install Gnu Ring;\ltell Justin your Ring ID.\l(Click this node to\lopen the Ring website).\r",
+               tooltip="Gnu Ring is a video/text chat tool with end-to-end encryption over a decentralized network.  Justin's Ring ID is not public.  You can distribute your Ring ID however you want and Justin will use it to connect so you have his Ring ID.  You may also request Justin's Ring ID via a secure channel."];
+
+        vmfax [label="voicemail/fax number\lavailable on request.\l",
+               tooltip="This is the least secure way to reach Justin. The phone number is not public but can be distributed over insecure e-mail if needed."];
 
         directsend_br [label=<Are you writing a typical<br/>
 human-generated e-mail,<br/>
@@ -208,7 +217,7 @@ dedicated e-mail service?>,
         acquire_smimekey -> crypto_ea [arrowhead=halfopen, style=dashed, color=magenta, fontcolor=magenta, label="lookup query string"];
         acquire_smimekey -> acquire_by_email [style=dotted, color=brown, fontcolor=brown, labelfloat=false, label="or alternatively"];
         */
-        
+
         // Gnu make will replace @pdfurl@ and @pdfpassword@ with the proper text
         pdf_acquire_key [URL="@pdfurl@/pubkeys_aes.pdf",
                          tooltip="Clicking this will open a PDF container holding keys to choose from.  Warning: if using an old browser, you may have to download the PDF and view in an external viewer.",
@@ -273,7 +282,7 @@ setup_outlook_note [URL="@pdfurl@/outlook_smime_setup.pdf",
 
 get_support [URL=<https://github.com/alchemistanaut/contact/issues>,
              fixedsize=true, width=2, height=1.4,
-             labelloc=t, labeljust=l, label="File a github issue by\lclicking this node, or\lE-mail Justin at:\l",
+             labelloc=t, labeljust=l, label="File an issue in github\l by clicking this node,\lor E-mail Justin at:\l",
              tooltip="Clicking will bring you to the github issues page, where you can describe your issue.  Note that you'll need a github account to create an issue, and your entry will be publicly viewable.  Alternatively, you can e-mail support questions to the address herein, in the clear if needed.",
              imagescale=width, imagepos="bc", image="node_item_suprt_ea.png"];
 

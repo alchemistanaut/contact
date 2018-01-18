@@ -14,7 +14,7 @@
 \usepackage{soul} %needed for \st
 \usepackage{tikz}
 
-\title{\rmfamily Configuring iOS's built-in S/MIME Cryptosystem}
+\title{\rmfamily Configuring mail.app's built-in S/MIME Cryptosystem (iOS)}
 %\newcommand{\theauthor}{J.G.}
 %\author{\rmfamily\theauthor}
 \date{\rmfamily\today}
@@ -55,7 +55,7 @@
 
 \section{Prerequisites}
 \begin{itemize}
-\item iOS device (e.g. iPhone or iPad).
+\item iOS device (e.g. iPhone or iPad) no older than iOS 6.0.
 \item A desktop browser is only needed initially to create SSL keys,
   and only if you are going to use a Certificate Authority (``CA'').
   The browser will not be used thereafter.  Any of these browsers will
@@ -105,6 +105,47 @@
 If you generated your key pair manually, skip to \fullref{import}.
 Otherwise, follow the steps below to first export your key from your
 browser.
+\subsubsection{(Safari only) Export your key from keychain access}
+Safari stores your key on your keychain instead of keeping it internal
+to the browser.  To export it:
+
+% Double-click on Keychain to open it. On the left, click on
+% ``Certificates''.  Highlight the certificate to export and open File
+% $\gg$ Export. Choose an
+% appropriate filename (e.g. \texttt{mycert.pfx}) and directory.
+
+\begin{minipage}{\textwidth}% This minipage inhibits page splitting
+  \begin{multicols}{2}
+    \begin{enumerate}
+    \item Open \emph{Finder} and go to Applications $\gg$ Utilities
+      $\gg$ Keychain Access.
+    \item Select the ``login'' keychain from the Keychains list on the
+      upper left side of the Keychain Access window.
+    \item Select ``My Certificates'' in the Category list on the lower
+      left side of the window.
+    \item On the right side of the window, a list of certificates will
+      appear. Find the one that’s associated with your e-mail
+      account. If there is more than one, check the expiration date
+      column and select the one with the most recent date. However, do
+      not select one that has a red X on its icon; such certificates
+      are invalid.
+    \item From the File menu choose ``Export~Items...''.
+    \item Select the ``Personal Information Exchange (\texttt{.p12})''
+      file format. Give the file a suitable name, and save it
+      someplace safe. I suggest that you do not save it to cloud
+      storage (iCloud, Dropbox, etc.)
+    \item You'll be prompted to create a strong passphrase for the
+      file. This will be used to secure your certificate while you
+      move it. It's important that you choose a very strong
+      passphrase. I recommend using a password that's at least 20
+      random characters long, or a phrase made up of six or more
+      random words.
+    \end{enumerate}
+  \end{multicols}
+\end{minipage}\\[1em]
+
+Continue on to \fullref{import}.
+
 \subsubsection{(Chrome only) Export your key from your browser}
 Follow \href{https://www.youtube.com/watch?v=n3rOEpGjrc\&start=310}{%
   YouTube video n3rOEpGjrc} (the link of which jumps you to the
@@ -119,9 +160,13 @@ relevant point in the video), or follow these steps:
   
 \input{src/key_export_chrome.tex}
 
+Continue on to \fullref{import}.
+
 \subsubsection{(Firefox only) Export your key from your browser}
 
 \input{src/key_export_firefox.tex}
+
+Continue on to \fullref{import}.
 
 \subsubsection{Export your key from browsers other than Chrome or Firefox}
 \shrug\ Try to mirror the approaches above in your browser.
@@ -185,8 +230,9 @@ continue with the following steps:\\[-2em]%
 
 \subsection{Distribute your S/MIME certificate (aka public key)}
 In short: simply send an e-mail to the recipient using mail.app.  If
-you created your own CA key pair instead of using your browser to
-subscribe to a CA, then you must also send the \verb|ca.crt| file
+you created your own CA and key pair manually instead of using your
+browser to subscribe to a CA, then you must also send the
+\verb|ca.crt| file
 that you created.\\
 
 Detailed explanation: You have a pair of keys (these were created in
@@ -213,19 +259,25 @@ the next section (\ref{import_cert}):
 
 \subsection{Importing the S/MIME certificate of another
   party}\label{import_cert}
-\begin{enumerate}
-\item Ask the other party to send you a signed message.
-\item \raisebox{0.6\baselineskip}{\parbox[t]{0.9\textwidth}{%
-      \begin{wrapfigure}{r}{0.2\textwidth}\includegraphics[width=0.2\textwidth]{images/mailapp_smime_signed_checkmark.png}\end{wrapfigure}
-      Open the signed message in mail.app.  Successfully signed
-      messages have a blue ten-point star with a check in the center,
-      which appears to the right of the senders
-      address.}}
-\item Tap the \emph{From} address.
-\item Tap ``\verb|View Certificate|''.
-\item Tap the ``\verb|Install|'' button.
-\item Tap ``\verb|Done|'' on the top right corner.
-\end{enumerate}
+\begin{minipage}{\textwidth}
+  \begin{multicols}{2}
+    \begin{enumerate}
+    \item Ask the other party to send you a signed message.
+    \item %\raisebox{0.6\baselineskip}{\parbox[t]{0.9\textwidth}{%
+          Open the signed message in mail.app.  Successfully signed
+          messages have a blue ten-point star with a check in the center,
+          which appears to the right of the senders
+          address. E.g. \raisebox{-0.8\baselineskip}{%
+            \includegraphics[width=0.2\textwidth]{%
+              images/mailapp_smime_signed_checkmark.png}}
+          
+    \item Tap the \emph{From} address.
+    \item Tap ``\verb|View Certificate|''.
+    \item Tap the ``\verb|Install|'' button.
+    \item Tap ``\verb|Done|'' on the top right corner.
+    \end{enumerate}
+  \end{multicols}
+\end{minipage}\\[1em]
 
 Now you can send encrypted messages to the sender.
 
