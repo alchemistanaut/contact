@@ -62,7 +62,7 @@
   work:
   
     \begin{tabular}{lp{50mm}>{\small}p{0.37\textwidth}}
-    \textsl{\textbf{Browser}}          & \textsl{\textbf{Key storage consistent with Apple Mail on OS/X}} & \textsl{\textbf{Notes}}\\
+    \textsl{\textbf{Browser}}          & \textsl{\textbf{Key storage consistent w/Apple Mail on OS/X}} & \textsl{\textbf{Notes}}\\
     Chrome/Chromium \tiny(OS/X)        & \yesgood                & Some versions of Chrome may have problems with key generation.\\
     \hline
     Chrome/Chromium \tiny(Windows)     & not applicable          & \\
@@ -117,8 +117,8 @@ to the browser.  To export it:
 \begin{minipage}{\textwidth}% This minipage inhibits page splitting
   \begin{multicols}{2}
     \begin{enumerate}
-    \item Open \emph{Finder} and go to Applications $\gg$ Utilities
-      $\gg$ Keychain Access.
+    \item Open \emph{Finder} and go to Applications $\triangleright$
+      Utilities $\triangleright$ Keychain Access.
     \item Select the ``login'' keychain from the Keychains list on the
       upper left side of the Keychain Access window.
     \item Select ``My Certificates'' in the Category list on the lower
@@ -217,9 +217,10 @@ continue with the following steps:\\[-2em]%
   \includegraphics[width=0.2\textwidth]{images/mailapp_smime_settings_indicated.png}
 \end{wrapfigure}%
 \begin{enumerate}%\setcounter{enumi}{14}
-\item (iOS device) go to: Settings $\gg$ Mail, Contacts, Calendars
-  $\gg$ Accounts: (e-mail service provider for the address you created
-  a key for) $\gg$ IMAP: Account... $\gg$ Advanced $\gg$ S/MIME.
+\item (iOS device) go to: Settings $\triangleright$ Mail, Contacts,
+  Calendars $\triangleright$ Accounts: (e-mail service provider for
+  the address you created a key for) $\triangleright$ IMAP:
+  Account... $\triangleright$ Advanced $\triangleright$ S/MIME.
 \item enable it
 \item go to: ``\verb|Sign|'' and enable it.  There will be an address under
   ``Certificates'' if the certificate installation worked earlier.
@@ -291,3 +292,4 @@ Now you can send encrypted messages to the sender.
 % 4) choose "save file", and save it to a place where you will remember (for the next step)
 % 5) compose an e-mail to me, and attach that file you just saved
 
+% some useful info here: http://www.macwhiz.com/blog/2014/11/18/apple-s-mime/#Part_One:_Export_the_certificate_from_your_Mac

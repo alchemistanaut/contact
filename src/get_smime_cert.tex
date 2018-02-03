@@ -17,7 +17,7 @@ follow
 your own CA and personal key pairs.
 
 \textbf{If you're opting to use a CA}, then browse to one of these
-certificate authorities (Justin recommends Comodo via Secorio):\\
+certificate authorities (Justin recommends Comodo via Secorio):
 
 \rowcolors{2}{Khaki}{LightGoldenrodYellow} %this breaks old versions of dvisvgm!
 \begin{tabular}{m{38mm}p{2.3cm}l>{\tiny}p{0.36\textwidth}}
@@ -26,14 +26,15 @@ certificate authorities (Justin recommends Comodo via Secorio):\\
   & \slshape\textbf{validity}
   & \slshape\normalsize\textbf{notes}\\
   %\hline\\
-  \href{https://www.cacert.org/}{\includegraphics[width=2cm]{images/logo_cacert4.png}} & gratis & 6|24 mos.\tiny (\href{http://wiki.cacert.org/FAQ/Privileges}{criteria}) & community driven; getting a 2yr cert requires meeting w/someone and showing state-issued proof of id\\
+  \href{https://www.cacert.org/}{\includegraphics[width=2cm]{images/logo_cacert4.png}} & gratis & 6|24 mos.\tiny (\href{http://wiki.cacert.org/FAQ/Privileges}{criteria}) & sign-up blocked when using a spamgourmet.com e-mail address; community-driven; getting a 2yr cert requires meeting w/someone and showing state-issued proof of id; recipients manually CA key to their keystore\\
   \href{https://secure.comodo.com/products/frontpage?area=SecureEmailCertificate}{\includegraphics[width=2cm]{images/logo_comodo.png}\tiny direct} & gratis & 1 yr &\\
   \href{https://www.instantssl.com/ssl-certificate-products/free-email-certificate.html}{\includegraphics[width=2cm]{images/logo_comodo.png}\tiny via InstantSSL} & gratis & 1 yr &\\
   \secorio & gratis & 1 yr & simple; assumed choice by this guide\\
   \href{https://www.entrust.com/secure-email-certificates/}{\includegraphics[width=2cm]{images/logo_entrust.png}} & $\geq$\$20 & &\\
   \href{https://www.identrust.com/certificates/trustid.html}{\includegraphics[width=2cm]{images/logo_trustid.png}} & $\geq$\$19 & &\\
-  \href{https://www.startcomca.com/}{\includegraphics[width=2cm]{images/logo_startcom.png}} & gratis & 2 yrs & distrusted by Mozilla and others, thus signed msgs will likely be seen as invalid unless recipients manually add Startcom's CA key to their keystore\\
-  \href{https://buy.wosign.com/free/}{\begin{overpic}[width=2cm]{images/logo_wosign.png}\put(-5,10){\color{black}\rule{24mm}{1pt}}\end{overpic}} & \st{gratis} n/a & \st{2 yrs} n/a & recently \textbf{discontinued} but still maintained in this list because they intend to return to business\\
+  \href{https://www.startcomca.com/}{\includegraphics[width=2cm]{images/logo_startcom.png}} & gratis & 2 yrs & previously distrusted by Mozilla \& others, but possibly reestablished\\
+  \href{https://buy.wosign.com/free/}{\begin{overpic}[width=2cm]{images/logo_wosign.png}\put(-5,10){\color{black}\rule{24mm}{1pt}}\end{overpic}\tiny(temp.down)} & \st{gratis} n/a & \st{2 yrs} n/a & recently \textbf{discontinued} but still maintained in this list because they intend to return to business\\
+  \href{https://wpia.club/en/}{\begin{overpic}[width=2cm]{images/logo_wpia.png}\put(-5,10){\color{black}\rule{24mm}{1pt}}\end{overpic}\tiny(future svc)} & will be gratis & unknown & Newly emerging svc (will be ready in a year or so); community-driven (like CACert) w/staff at FOSDEM; will req. two ID verifiers; unique possibility to gen your own key (e.g. \textit{openssl} CLI) \& upload it to website\\
 \end{tabular}\\
 
 % geotrust, symantec, thawte have discontinued service

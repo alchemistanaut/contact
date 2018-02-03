@@ -134,6 +134,7 @@ $(output_dir)/%.svg: $(work_dir)/%_ugly.svg
 ####### Build rules
 
 $(work_dir)/pubkeys.pdf: $(work_dir)/pubkeys_files.tex
+$(work_dir)/mailapp_smime_setup.pdf $(work_dir)/outlook_smime_setup.pdf: $(src_dir)/key_export_firefox.tex $(src_dir)/key_export_chrome.tex
 
 # it's a shame we depend on node_muas.png instead of node_muas.svg, but svg images render blank
 $(output_dir)/$(product_basename).svg: $(output_dir)/node_item_suprt_ea.png $(output_dir)/node_webmail_addresses.png $(output_dir)/node_email_addresses.png $(output_dir)/node_muas.png $(output_dir)/pubkeys_aes.pdf
